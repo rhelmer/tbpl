@@ -630,8 +630,10 @@ Data.prototype = {
           return;
         }
         self._hiddenBuilders = json;
-        if (self._afterLoadedHiddenBuildersCallback)
+        if (self._afterLoadedHiddenBuildersCallback) {
           self._afterLoadedHiddenBuildersCallback(self._hiddenBuilders);
+          self._afterLoadedHiddenBuildersCallback = null;
+        }
         loadTracker.loadCompleted();
       },
       error: function (request, textStatus, er) {
