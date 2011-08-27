@@ -294,9 +294,11 @@ var Config = {
 };
 
 Config.resultNames = {};
-for (var b in Config.buildNames) {
-  Config.resultNames[b] = Config.buildNames[b];
-}
-for (var t in Config.testNames) {
-  Config.resultNames[t] = Config.testNames[t];
-}
+(function() {
+  for (var b in Config.buildNames) {
+    Config.resultNames[b] = Config.buildNames[b];
+  }
+  for (var t in Config.testNames) {
+    Config.resultNames[t] = Config.testNames[t];
+  }
+})();
