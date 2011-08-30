@@ -6,11 +6,18 @@
 // branch $_GET['branch'] as a JSON encoded array.
 
 require_once 'config.php';
-require_once 'inc/HiddenBuilders.php';
 require_once 'inc/Communication.php';
 
 Headers::send(Headers::ALLOW_CROSS_ORIGIN | Headers::NO_CACHE, "application/json");
 
 $branch = requireStringParameter('branch', $_GET);
 
-echo json_encode(getHiddenBuilderNames($branch)) . "\n";
+$stmt = $db->prepare("
+  SELECT buildername
+  FROM builders
+  WHERE branch = :branch AND hidden = TRUE;");
+$stmt->execute(array(":branch" => $branch));
+$stmt->setFetchMode(PDO::FETCH_COLUMN, 0);
+$result = $stmt->fetchAll();
+
+echo json_encode($result) . "\n";

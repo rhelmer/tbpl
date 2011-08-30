@@ -28,25 +28,38 @@ $actions = json_decode(requireStringParameter('actions', $_POST));
 $who = requireStringParameter('who', $_POST);
 $reason = requireStringParameter('reason', $_POST);
 
-$mongo = new Mongo();
+$db->beginTransaction();
+
 foreach ($actions as $name => $action) {
-  $current = $mongo->tbpl->builders->findOne(
-    array('name' => $name), array('hidden' => 1));
-  if ($current === NULL)
+  $stmt = $db->prepare("
+    SELECT id, hidden
+    FROM builders
+    WHERE name = :name;");
+  $stmt->execute(array(":name" => $name));
+  $current = $stmt->fetch(PDO::FETCH_ASSOC);
+  if (!$current)
     continue;
-  $currentlyHidden = !empty($current['hidden']);
+  $currentlyHidden = $current['hidden'] == "1";
   if (($currentlyHidden && $action != 'unhide') ||
       (!$currentlyHidden && $action != 'hide'))
     continue;
   $newHidden = ($action == 'hide');
-  $historyEntry = array(
-    'date' => time(),
-    'action' => $action,
-    'who' => $who,
-    'reason' => $reason,
-    'ip' => $ip);
-  $mongo->tbpl->builders->update(
-    array('name' => $name),
-    array('$set' => array('hidden' => $newHidden),
-          '$push' => array('history' => $historyEntry)));
+  $stmt = $db->prepare("
+    UPDATE builders
+    SET hidden = :hidden
+    WHERE id = :id;");
+  $stmt->execute(array(":id" => $current["id"], ":hidden" => $newHidden));
+  
+  $stmt = $db->prepare("
+    INSERT INTO builders_history 
+    SET builder_id = :builder, action = :action, who = :who, reason = :reason,
+      ip = :ip;");
+  $stmt->execute(array(
+    ':builder' => $current["id"],
+    ':action' => $action,
+    ':who' => $who,
+    ':reason' => $reason,
+    ':ip' => $ip));
 }
+
+$db->commit();

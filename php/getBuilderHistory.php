@@ -12,9 +12,12 @@ Headers::send(Headers::ALLOW_CROSS_ORIGIN | Headers::NO_CACHE, "application/json
 
 $name = requireStringParameter('name', $_GET);
 
-$mongo = new Mongo();
-$mongo->tbpl->builders->ensureIndex(array('name' => true));
-$result = $mongo->tbpl->builders->findOne(
-            array('name' => $name),
-            array('_id' => 0, 'name' => 0, 'history.ip' => 0));
-echo json_encode($result['history']) . "\n";
+$stmt = $db->prepare("
+  SELECT unix_timestamp(date) AS date, action, who, reason
+  FROM builders_history
+  JOIN builders ON (builders.id = builder_id)
+  WHERE name = :name;");
+$stmt->execute(array(":name" => $name));
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+echo json_encode($result) . "\n";

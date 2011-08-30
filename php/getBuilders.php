@@ -13,9 +13,18 @@ Headers::send(Headers::ALLOW_CROSS_ORIGIN | Headers::NO_CACHE, "application/json
 
 $branch = requireStringParameter('branch', $_GET);
 
-$mongo = new Mongo();
-$mongo->tbpl->builders->ensureIndex(array('branch' => true));
-$result = $mongo->tbpl->builders->find(
-            array('branch' => $branch),
-            array('_id' => 0, 'branch' => 0, 'history' => 0));
-echo json_encode(iterator_to_array($result->sort(array('name'=>1)), false)) . "\n";
+$stmt = $db->prepare("
+  SELECT name, buildername, hidden
+  FROM builders
+  WHERE branch = :branch
+  ORDER BY buildername ASC;");
+$stmt->execute(array(":branch" => $branch));
+
+// mysql returns everything as string, so we need to manually cast to bool :-(
+$result = array();
+while ($builder = $stmt->fetch(PDO::FETCH_ASSOC)) {
+  $builder['hidden'] = $builder['hidden'] != "0";
+  $result[] = $builder;
+}
+
+echo json_encode($result) . "\n";

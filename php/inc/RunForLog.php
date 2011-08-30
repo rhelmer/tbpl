@@ -5,10 +5,17 @@
 require_once 'config.php';
 
 function getRequestedRun() {
+  global $db;
   if (!isset($_GET["id"]))
     die("No id set.");
-  $mongo = new Mongo();
-  $run = $mongo->tbpl->runs->findOne(array('_id' => +$_GET["id"]));
+  $stmt = $db->prepare("
+    SELECT id AS _id, buildername, slave, revision, result, branch, log,
+      unix_timestamp(starttime) AS starttime,
+      unix_timestamp(endtime) AS endtime
+    FROM runs
+    WHERE buildbot_id = :id;");
+  $stmt->execute(array(":id" => $_GET["id"]));
+  $run = $stmt->fetch(PDO::FETCH_ASSOC);
   if (!$run)
     die("Unknown run ID.");
   if (empty($run['log']))
