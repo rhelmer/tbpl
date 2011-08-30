@@ -134,13 +134,19 @@ class tbpl-base {
             cwd => '/home/tbpl/dev/tbpl',
             require => Exec['git-clone'];
 
+        '/bin/cp -v /home/tbpl/dev/tbpl/php/config.php.example /home/tbpl/dev/tbpl/php/config.php':
+            alias => 'tbpl-configure-php',
+            creates => '/home/tbpl/dev/tbpl/php/config.php',
+            require => [User[tbpl], Exec[git-pull]],
+            user => 'tbpl';
+
         '/usr/bin/rsync -av --exclude=".git" /home/tbpl/dev/tbpl/ /var/www/tbpl/':
             alias => 'tbpl-install',
             timeout => '3600',
-            require => [User[tbpl], Exec[git-pull], Package[rsync], File['/var/www/tbpl']],
+            require => [User[tbpl], Exec[git-pull], Package[rsync], File['/var/www/tbpl'], Exec['tbpl-configure-php']],
             user => 'tbpl';
 
-        '/bin/echo "drop database if exists tbpl; create database tbpl; grant all on tbpl.* to tbpl identified by \'test\';" | /usr/bin/mysql && /bin/cat /home/tbpl/dev/tbpl/dataimport/schema.sql  | /usr/bin/mysql tbpl':
+        '/bin/echo "drop database if exists tbpl; create database tbpl; grant all on tbpl.* to tbpl identified by \'tbpl\';" | /usr/bin/mysql && /bin/cat /home/tbpl/dev/tbpl/schema.sql  | /usr/bin/mysql tbpl':
             alias => 'mysql-setup',
             require => [Package['mysql-server'], Exec['tbpl-install']]
     }
