@@ -6,6 +6,7 @@
 // [ { "name": "...", "buildername": "...", "hidden": 0/1 }, ... ]
 // hidden:0 may be ommitted.
 
+require_once 'config.php';
 require_once 'inc/Communication.php';
 
 Headers::send(Headers::ALLOW_CROSS_ORIGIN | Headers::NO_CACHE, "application/json");

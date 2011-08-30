@@ -5,6 +5,7 @@
 // Returns the buildernames of all hidden builders belonging to the
 // branch $_GET['branch'] as a JSON encoded array.
 
+require_once 'config.php';
 require_once 'inc/HiddenBuilders.php';
 require_once 'inc/Communication.php';
 

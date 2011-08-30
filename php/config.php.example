@@ -1,0 +1,32 @@
+<?php
+/**
+ * This is the main config for tbpl. Please rename this file to config.php and
+ * fill out the information below.
+ */
+
+/**
+ * The tree admin interface, where it is possible to hide or unhide builders
+ * uses the sheriff password to work.
+ */
+define('SHERIFF_PASSWORD', 'password');
+
+/**
+ * Tbpl can automatically comment on bugzilla using the account credentials
+ * below.
+ */
+define('TBPLBOT_EMAIL', 'tbplbot@gmail.com');
+define('TBPLBOT_PASSWORD', 'password');
+
+
+/**
+ * Tbpl uses PDO to access its database. This should export $db as a PDO object,
+ * See http://www.php.net/manual/en/pdo.construct.php for more info.
+ */
+$db = new PDO('mysql:dbname=tbpl;host=localhost', 'tbpl', 'tbpl');
+
+/**
+ * Not part of the config, but to make sure mysql talks to us in utf8 and uses
+ * exceptions
+ */
+$db->exec('SET NAMES "utf8"');
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

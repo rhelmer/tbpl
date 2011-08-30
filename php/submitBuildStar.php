@@ -1,5 +1,6 @@
 <?php
 
+require_once 'config.php';
 require_once 'inc/Communication.php';
 
 Headers::send(Headers::ALLOW_CROSS_ORIGIN, "application/json");

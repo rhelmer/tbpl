@@ -12,7 +12,7 @@
 //     { 'name of builder': 'hide / unhide', ... }
 //    Unlisted builders stay unchanged.
 
-require_once 'sheriff-password.php';
+require_once 'config.php';
 if (!defined('SHERIFF_PASSWORD'))
   die('Sheriff password missing.');
 

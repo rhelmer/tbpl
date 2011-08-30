@@ -2,10 +2,10 @@
 /* -*- Mode: PHP; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* vim: set sw=2 ts=2 et tw=80 : */
 
-require_once 'tbplbot-password.php';
+require_once 'config.php';
 require_once 'inc/JSON.php';
 
-if (!defined('TBPLBOT_PASSWORD'))
+if (!defined('TBPLBOT_EMAIL') || !defined('TBPLBOT_PASSWORD'))
   die('Invalid configuration!');
 
 if (!isset($_POST['id']) || !isset($_POST['comment']))
@@ -21,7 +21,7 @@ if ($bugid <=0)
 header("Content-Type: text/plain");
 header("Access-Control-Allow-Origin: *");
 
-$url = "https://api-dev.bugzilla.mozilla.org/latest/bug/$bugid/comment?username=tbplbot@gmail.com&password=" . urlencode(TBPLBOT_PASSWORD);
+$url = "https://api-dev.bugzilla.mozilla.org/latest/bug/$bugid/comment?username=" . urlencode(TBPLBOT_EMAIL) . "&password=" . urlencode(TBPLBOT_PASSWORD);
 $json = new Services_JSON();
 $data = array(
   "text" => sanitize($_POST["comment"])

@@ -5,6 +5,7 @@
 // Returns the change history of the builder identified by $_GET['name'].
 // [ { "date": 1306421449, "action": "insert / hide / unhide", "who": "...", "reason": "..." }, ... ]
 
+require_once 'config.php';
 require_once 'inc/Communication.php';
 
 Headers::send(Headers::ALLOW_CROSS_ORIGIN | Headers::NO_CACHE, "application/json");
