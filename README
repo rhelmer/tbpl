@@ -19,10 +19,9 @@ TBPL has a client-side and a server-side component. Running only the client-side
 If you want a standalone instance of TBPL with your own server-side component, the requirements for your server are a little higher. Data is stored in a MongoDB database, which is accessed by both python (dataimport/import-buildbot-data.py) and PHP scripts. All in all, you need these things:
 
  - a webserver (e.g. Apache)
- - MongoDB (any recent version will do)
- - PHP 5.3
- - MongoPHP (the Mongo driver for PHP)
- - Python 2.6 or better with the packages pymongo, pytz and simplejson
+ - MySQL 5.1
+ - PHP 5.3 with PDO
+ - Python 2.6 or better with the packages mysqldb, pytz and simplejson
 
 Then you can set everything up:
 
@@ -30,10 +29,10 @@ cd path/to/tbpl
 # Create the folders "summaries" and "cache" in the tbpl directory and make them writable for all users:
 mkdir cache summaries
 chmod a+w cache summaries
-# Create the file php/sheriff-password.php that stores the hidden builder admin password:
-echo "<?php define('SHERIFF_PASSWORD', 'thepassword');" > php/sheriff-password.php
-# Start the MongoDB server if it's not running already, for example like this (in a different shell):
-/path/to/bin/mongo -bind_ip 127.0.0.1
+# Copy the file php/config.php.example to php/config.php and follow the instructions therein to set up the needed information.
+
+# Make sure that MySQL is running and that it is set up correctly in config.php
+
 # Start the initial import (this will take a while):
 python26 dataimport/import-buildbot-data.py -d 5 # 5 is the number of days to go back in time
 
@@ -41,9 +40,4 @@ In order to keep the run data in the database up to date, the import script need
 */5 * * * * python26 /path/to/tbpl/dataimport/import-buildbot-data.py
 This will run dataimport/import-buildbot-data.py every 5 minutes.
 
-If any of this doesn't work, pester mstange or file a TBPL bug.
-
-If you want Tinderboxpushlog Robot to be able to comment in Bugzilla, you'll need to ask Ehsan for the tbplbot-password.php file and store it in the php folder. Alternatively you could create your own Bugzilla user, replace tbplbot@gmail.com in submitBugzillaComment.php with you user's email and add a tbplbot-password.php file that looks like this:
-<?php define('TBPLBOT_PASSWORD', 'yourpassword'); ?>
-
-If you have a question, just send me an email at mstange@themasta.com.
+If any of this doesn't work, or if you have any other questions, pester mstange or file a TBPL bug.

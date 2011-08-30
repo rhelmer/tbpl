@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# This script imports run data from build.mozilla.org into the local MongoDB;
+# This script imports run data from build.mozilla.org into the local MySQL DB;
 # specifically, into the "runs" table of the "tbpl" database.
 # The data saved in the database is made accessible to TBPL clients via the
 # php/get*.php scripts.
@@ -17,7 +17,8 @@ import time
 import re
 import optparse
 import pytz
-from pymongo import Connection
+import MySQLdb
+import os
 from string import Template
 
 try:
@@ -85,12 +86,13 @@ class Run(object):
         self._rev = fix_revision(self._props["revision"])
 
     def get_info(self):
+        tzinfo = pytz.timezone("America/Los_Angeles")
         info = {
             "buildername": self._props.get("buildername", self._builder), # builder ux_leopard_test-scroll doesn't have a props["buildername"]
             "slave": self._slave,
             "revision": self._rev,
-            "starttime": self._build["starttime"],
-            "endtime": self._build["endtime"],
+            "starttime": datetime.datetime.fromtimestamp(self._build["starttime"], tzinfo),
+            "endtime": datetime.datetime.fromtimestamp(self._build["endtime"], tzinfo),
             "result": convert_status(self._build["result"]),
             "branch": self._props["branch"],
         }
@@ -190,29 +192,47 @@ def get_builders(j):
         yield builder["name"], builder["category"], builder.get("buildername")
 
 def add_run_to_db(run, db, overwrite):
-    id_criterion = {"_id": run.id}
-    if not overwrite and db.runs.find_one(id_criterion):
+    cursor = db.cursor()
+    cursor.execute("SELECT count(*) FROM runs WHERE buildbot_id = %s", run.id)
+    count = cursor.fetchone()[0]
+    if not overwrite and count > 0:
         return False
-    db.runs.update(id_criterion, {"$set": run.get_info()}, True)
+
+    params = [run.id]
+    for key in ('buildername', 'slave', 'revision', 'starttime', 'endtime', 
+                'result', 'branch', 'log'):
+        params.append(run.get_info().get(key))
+
+    cursor.execute("""INSERT INTO runs (buildbot_id, buildername, slave, revision, 
+                                        starttime, endtime, result, branch, log)
+                      VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                      ON DUPLICATE KEY UPDATE 
+                        buildbot_id=%s, buildername=%s, slave=%s, revision=%s, 
+                        starttime=%s, endtime=%s, result=%s, branch=%s, 
+                        log=%s""", params * 2)
     return True
 
 def add_builder_to_db(builder, db):
     (name, branch, buildername) = builder
-    existing = db.builders.find_one({"name": name}, {"buildername": 1})
-    if not existing:
-        db.builders.insert({
-            "name": name,
-            "branch": branch,
-            "buildername": buildername,
-            "history": [{
-                "date": int(time.time()),
-                "action": "insert"
-            }]
-        })
+    cursor = db.cursor()
+    cursor.execute("SELECT count(*) FROM builders WHERE name = %s", name)
+    count = cursor.fetchone()[0]
+    if count == 0:
+        params = (name, branch, buildername)
+        cursor.execute("""INSERT INTO builders (name, branch, buildername)
+                          VALUES (%s, %s, %s)""", params)
+
+        builder_id = cursor.lastrowid
+
+        cursor.execute("""INSERT INTO builders_history (builder_id, action)
+                          VALUES (%s, %s)""", (builder_id, "insert"))
         return True
-    if existing["buildername"] is None and buildername is not None:
-        db.builders.update({"name": name}, {"$set": {"buildername": buildername}})
-        return True
+    elif buildername != None:
+        cursor.execute("UPDATE builders SET buildername = %s WHERE name = %s", (buildername, name))
+        if cursor.rowcount == 0:
+            return False
+        else:
+            return True
     return False
 
 def add_to_db(url, db, overwrite):
@@ -229,7 +249,6 @@ def add_to_db(url, db, overwrite):
         print "Inserted", count, "new run entries."
 
     print "Traversing builders and updating database..."
-    db.builders.ensure_index("name")
     count = sum([add_builder_to_db(builder, db) for builder in get_builders(j)])
     print "Updated", count, "builders."
 
@@ -248,16 +267,35 @@ def main():
     parser = optparse.OptionParser(usage=usage)
     parser.add_option("-d","--days",help="number of days to import",type=int,default=0)
     parser.add_option("-f","--force",help="force overwrite",dest="overwrite",action="store_true",default=False)
+    parser.add_option("-u","--username",help="mysql username",type=str,default="tbpl")
+    parser.add_option("-p","--password",help="mysql password",type=str,default=None)
+    parser.add_option("-H","--hostname",help="mysql hostname",type=str,default="localhost")
+    parser.add_option("-n","--dbname",help="mysql database name",type=str,default="tbpl")
     (options,args) = parser.parse_args()
 
+    password = ""
+    if options.password is None:
+        env_pass = os.getenv("MYSQL_PASSWORD")
+        if env_pass != None:
+            password = env_pass
+    else:
+        password = options.password
+        
+
     # Import recent runs.
-    do_recent(Connection().tbpl, options.overwrite)
+    db = MySQLdb.connect(
+        host = options.hostname,
+        user = options.username,
+        passwd = password,
+        db = options.dbname)
+    do_recent(db, options.overwrite)
 
     # Import options.days days of history.
     tzinfo = pytz.timezone("America/Los_Angeles")
     today = datetime.datetime.now(tzinfo)
     for i in range(options.days):
-        do_date(today - datetime.timedelta(i), Connection().tbpl, options.overwrite)
+        do_date(today - datetime.timedelta(i), db, options.overwrite)
+    db.commit()
 
 if __name__ == "__main__":
    main()
