@@ -9,7 +9,8 @@ function getRequestedRun() {
   if (!isset($_GET["id"]))
     die("No id set.");
   $stmt = $db->prepare("
-    SELECT id AS _id, buildername, slave, revision, result, branch, log,
+    SELECT buildbot_id 
+    AS _id, buildername, slave, revision, result, branch, log,
       unix_timestamp(starttime) AS starttime,
       unix_timestamp(endtime) AS endtime
     FROM runs
