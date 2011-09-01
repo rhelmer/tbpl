@@ -261,7 +261,7 @@ def do_recent(db, overwrite):
 usage = """
 %prog [options]
 
-Import run information from JSON files on build.mozilla.org into the local MongoDB database."""
+Import run information from JSON files on build.mozilla.org into the local MySQL database."""
 
 def main():
     parser = optparse.OptionParser(usage=usage)
