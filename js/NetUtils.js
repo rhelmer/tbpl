@@ -14,7 +14,7 @@ var NetUtils = {
 
   _loadText: function NetUtils__loadText(url, method, requestHeaders, requestBody, withCredentials, loadCallback, failCallback, timeoutCallback, timeout) {
     if (!timeout) {
-      timeout = 30; // seconds
+      timeout = 120; // seconds
     }
 
     var errorTimer;
