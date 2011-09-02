@@ -1,0 +1,6 @@
+# /etc/cron.d/tbpl: crontab fragment for tbpl
+#  This refreshes the local MySQL DB with the latest buildbot json files.
+
+MYSQL_PASSWORD="tbpl"
+# Refresh local DB every 5 minutes
+*/5 * * * * tbpl python /var/www/tbpl/dataimport/import-buildbot-data.py
