@@ -228,7 +228,11 @@ def add_builder_to_db(builder, db):
                           VALUES (%s, %s)""", (builder_id, "insert"))
         return True
     elif buildername != None:
-        cursor.execute("UPDATE builders SET buildername = %s WHERE name = %s", (buildername, name))
+        cursor.execute("""UPDATE builders
+                           SET buildername = %s, branch = %s
+                           WHERE name = %s""",
+                        (buildername, branch, name))
+
         if cursor.rowcount == 0:
             return False
         else:
