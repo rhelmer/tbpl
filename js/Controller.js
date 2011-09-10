@@ -48,9 +48,9 @@ var Controller = {
       return;
     }
 
-    if (("usebuildbot" in params) && (params.usebuildbot == "1")) {
-      // Override config until we can switch to Buildbot by default.
-      Config.tinderboxDataLoader = BuildbotDBUser;
+    if (("usetinderbox" in params) && (params.usetinderbox == "1")) {
+      // Override for anyone needing the old tinderbox source
+      Config.tinderboxDataLoader = TinderboxJSONUser;
     }
 
     this.treeName = ("tree" in params) && params.tree;

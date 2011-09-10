@@ -4,7 +4,7 @@
 "use strict";
 
 var Config = {
-  tinderboxDataLoader: TinderboxJSONUser,
+  tinderboxDataLoader: BuildbotDBUser,
   pushlogDataLoader: PushlogJSONParser,
   defaultTreeName: "Firefox",
   mvtTimezoneOffset: -7,
