@@ -27,7 +27,7 @@ class GzipUtils {
     return self::mendBrokenLines(gzfile($filename));
   }
 
-  public static function mendBrokenLines($lineArray) {
+  public static function mendBrokenLines(&$lineArray) {
     $numLines = count($lineArray);
     for ($i = 0; $i < $numLines - 1; $i = $j) {
       for ($j = $i + 1; $j < $numLines && substr($lineArray[$i], -1) != "\n"; $j++) {
@@ -35,6 +35,7 @@ class GzipUtils {
         unset($lineArray[$j]);
       }
     }
-    return array_values($lineArray);
+    $lineArray = array_values($lineArray);
+    return $lineArray;
   }
 }

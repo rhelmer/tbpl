@@ -26,9 +26,9 @@ class FullLogGenerator extends ParsedLogGenerator {
     return $encodedLines;
   }
 
-  private function linkLinesWithErrors($lines, $linesWithErrors) {
+  private function linkLinesWithErrors(&$lines, $linesWithErrors) {
     foreach ($linesWithErrors as $errorNumber => $lineWithError) {
-      $lines[$i] = '<strong id="error'.$errorNumber.'">'.$lines[$i].'</strong>';
+      $lines[$lineWithError] = '<strong id="error'.$errorNumber.'">'.$lines[$lineWithError].'</strong>';
     }
   }
   
