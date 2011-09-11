@@ -1,16 +1,13 @@
 <?php
 
-if (!isset($_GET["tree"]) || !isset($_GET["id"]))
-  die("tree or id not set");
-
-if (!preg_match('/^[a-zA-Z0-9\.-]+$/', $_GET["tree"]))
-  die("invalid tree");
+if (!isset($_GET["id"]))
+  die("id not set");
 
 set_time_limit(120);
 
-echo analyze($_GET["tree"], $_GET["id"]);
+echo analyze($_GET["id"]);
 
-function analyze($tree, $id) {
+function analyze($id) {
   $file = "../summaries/LeakAnalysis_" . $tree . "_" . $id;
   if (file_exists($file))
     return file_get_contents($file);
@@ -26,8 +23,14 @@ function analyze($tree, $id) {
   $windows = array();
   $lastTestName = '';
   if ($usetinderbox == 1) { 
-    if (!preg_match('/^\d+\.\d+\.\d+\.gz$/', $_GET["id"]))
+    if (!preg_match('/^\d+\.\d+\.\d+\.gz$/', $id))
       die("invalid id");
+
+    if (!isset($_GET["tree"]))
+      die("tree not set");
+    if (!preg_match('/^[a-zA-Z0-9\.-]+$/', $_GET["tree"]))
+      die("invalid tree");
+    $tree = $_GET["tree"];
 
     $host = "tinderbox.mozilla.org";
     $page = "/showlog.cgi?log=" . $tree . "/" . $id; // . 1233853948.1233859186.27458.gz";
@@ -42,7 +45,7 @@ function analyze($tree, $id) {
     stream_set_timeout($fp, 20);
     stream_set_blocking($fp, 0);
   } else {
-    if (!preg_match('/^\d+$/', $_GET["id"]))
+    if (!preg_match('/^\d+$/', $id))
       die("invalid id");
 
     $log_filename = "../cache/rawlog/" . $id . ".txt.gz";

@@ -56,7 +56,7 @@ var BuildbotDBUser = {
         "absoluteBriefLogURL": Config.absoluteBaseURL + 'php/getParsedLog.php?id=' + run._id + '&tree=' + tree,
         "fullLogURL": Config.baseURL + 'php/getParsedLog.php?id=' + run._id + '&tree=' + tree + '&full=1',
         "summaryURL": Config.baseURL + "php/getLogExcerpt.php?id=" + run._id,
-        "annotatedSummaryURL": Config.baseURL + "php/getLogExcerpt.php?id=" + run._id + '&tree=' + tree + '&type=annotated',
+        "annotatedSummaryURL": Config.baseURL + "php/getLogExcerpt.php?id=" + run._id + '&type=annotated',
         "reftestLogURL": Config.baseURL + "php/getLogExcerpt.php?id=" + run._id + '&type=reftest',
         "_scrapeURL": Config.baseURL + "php/getLogExcerpt.php?id=" + run._id + '&type=tinderbox_print',
         "revs": revs,
