@@ -1,0 +1,31 @@
+This project will use vagrant and puppet to 
+install a complete Mozilla TBPL Server (https://wiki.mozilla.org/Tinderboxpushlog)
+environment in a local VM.
+
+---
+INSTALL
+---
+
+1) Install the latest Virtualbox from http://www.virtualbox.org/ 
+
+2) Run vagrant (http://vagrantup.com/) :
+
+$ gem install vagrant
+$ vagrant box add lucid64 http://files.vagrantup.com/lucid64.box
+$ vagrant up
+
+3) Add 33.33.33.11 to /etc/hosts:
+33.33.33.11	tbpl
+
+4) Enjoy your Mozilla TBPL environment!
+
+dashboard:      http://tbpl
+
+SSH into your VM:
+$ vagrant ssh
+
+---
+KNOWN ISSUES
+---
+
+* depends on external buildbot/tinderbox/hgpushlog/bugzilla/etc
