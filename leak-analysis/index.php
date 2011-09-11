@@ -21,7 +21,14 @@ function analyze($tree, $id) {
   }
 
   $fp = NULL;
-  if ($usetinderbox==1) { 
+  $lines = array();
+  $fileExistedAfterAll = false;
+  $windows = array();
+  $lastTestName = '';
+  if ($usetinderbox == 1) { 
+    if (!preg_match('/^\d+\.\d+\.\d+\.gz$/', $_GET["id"]))
+      die("invalid id");
+
     $host = "tinderbox.mozilla.org";
     $page = "/showlog.cgi?log=" . $tree . "/" . $id; // . 1233853948.1233859186.27458.gz";
     $page .= "&fulltext=1";
@@ -31,14 +38,13 @@ function analyze($tree, $id) {
     $request = "GET $page HTTP/1.0\r\n";
     $request .= "Host: $host\r\n";
     $request .= "User-Agent: PHP test client\r\n\r\n";
-    $lines = array();
     fputs ($fp, $request);
     stream_set_timeout($fp, 20);
     stream_set_blocking($fp, 0);
-    $fileExistedAfterAll = false;
-    $windows = array();
-    $lastTestName = '';
   } else {
+    if (!preg_match('/^\d+$/', $_GET["id"]))
+      die("invalid id");
+
     $log_filename = "../cache/rawlog/" . $id . ".txt.gz";
     if (file_exists($log_filename)) { 
       $fp = gzopen($log_filename, "r");
