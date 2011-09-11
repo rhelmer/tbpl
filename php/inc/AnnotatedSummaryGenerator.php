@@ -58,7 +58,7 @@ class AnnotatedSummaryGenerator implements FileGenerator {
     if (count($parts) < 2 &&
         preg_match('/^leaked/i', $tokens[2])) {
       $lines[] = "<a href=\"leak-analysis/?id=" . $_GET["id"] .
-        "&tree=" . $_GET["tree"] . "\" target=\"_blank\">Analyze the leak.</a>";
+        "\" target=\"_blank\">Analyze the leak.</a>";
       return;
     }
   
