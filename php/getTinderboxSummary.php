@@ -148,7 +148,7 @@ function processLine(&$lines, $line) {
   if (count($parts) < 2 &&
       preg_match('/^leaked/i', $tokens[2])) {
     $lines[] = "<a href=\"leak-analysis/?id=" . $_GET["id"] .
-      "&tree=" . $_GET["tree"] . "\" target=\"_blank\">Analyze the leak.</a>";
+      "&usetinderbox=1" . "&tree=" . $_GET["tree"] . "\" target=\"_blank\">Analyze the leak.</a>";
     return;
   }
 
