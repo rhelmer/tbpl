@@ -6,9 +6,6 @@ if (!isset($_GET["tree"]) || !isset($_GET["id"]))
 if (!preg_match('/^[a-zA-Z0-9\.-]+$/', $_GET["tree"]))
   die("invalid tree");
 
-if (!preg_match('/^\d+\.\d+\.\d+\.gz$/', $_GET["id"]))
-  die("invalid id");
-
 set_time_limit(120);
 
 echo analyze($_GET["tree"], $_GET["id"]);
@@ -18,22 +15,37 @@ function analyze($tree, $id) {
   if (file_exists($file))
     return file_get_contents($file);
 
-  $host = "tinderbox.mozilla.org";
-  $page = "/showlog.cgi?log=" . $tree . "/" . $id; // . 1233853948.1233859186.27458.gz";
-  $page .= "&fulltext=1";
-  $fp = fsockopen($host, 80, $errno, $errdesc);
-  if (!$fp)
-    return "Couldn't connect to $host:\nError: $errno\nDesc: $errdesc\n";
-  $request = "GET $page HTTP/1.0\r\n";
-  $request .= "Host: $host\r\n";
-  $request .= "User-Agent: PHP test client\r\n\r\n";
-  $lines = array();
-  fputs ($fp, $request);
-  stream_set_timeout($fp, 20);
-  stream_set_blocking($fp, 0);
-  $fileExistedAfterAll = false;
-  $windows = array();
-  $lastTestName = '';
+  $usetinderbox = 0;
+  if (isset($_GET["usetinderbox"])) {
+    $usetinderbox = $_GET["usetinderbox"];
+  }
+
+  $fp = NULL;
+  if ($usetinderbox==1) { 
+    $host = "tinderbox.mozilla.org";
+    $page = "/showlog.cgi?log=" . $tree . "/" . $id; // . 1233853948.1233859186.27458.gz";
+    $page .= "&fulltext=1";
+    $fp = fsockopen($host, 80, $errno, $errdesc);
+    if (!$fp)
+      return "Couldn't connect to $host:\nError: $errno\nDesc: $errdesc\n";
+    $request = "GET $page HTTP/1.0\r\n";
+    $request .= "Host: $host\r\n";
+    $request .= "User-Agent: PHP test client\r\n\r\n";
+    $lines = array();
+    fputs ($fp, $request);
+    stream_set_timeout($fp, 20);
+    stream_set_blocking($fp, 0);
+    $fileExistedAfterAll = false;
+    $windows = array();
+    $lastTestName = '';
+  } else {
+    $log_filename = "../cache/rawlog/" . $id . ".txt.gz";
+    if (file_exists($log_filename)) { 
+      $fp = gzopen($log_filename, "r");
+    } else {
+      return "Could not find log file in cache for id: $id\n";
+    }
+  }
   while (!feof($fp)) {
     if (file_exists($file)) {
       $fileExistedAfterAll = true;
