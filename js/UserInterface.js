@@ -380,14 +380,14 @@ var UserInterface = {
     if (this._treeName in Config.treeInfo) {
       var treeInfo = $('#treeInfo');
       var primaryRepo = Config.treeInfo[this._treeName].primaryRepo;
-      $('<dt>Pushlog:</dt><dd><a href="http://hg.mozilla.org/' + primaryRepo + '/pushloghtml">' +
+      $('<dt>Pushlog:</dt><dd><a href="https://hg.mozilla.org/' + primaryRepo + '/pushloghtml">' +
         Config.treeInfo[this._treeName].primaryRepo +
         '</a></dd>').appendTo(treeInfo);
 
       if ('otherRepo' in Config.treeInfo[this._treeName]) {
         var otherRepo = Config.treeInfo[this._treeName].otherRepo;
 
-        $('<dt></dt><dd><a href="http://hg.mozilla.org/' + otherRepo + '/pushloghtml">' +
+        $('<dt></dt><dd><a href="https://hg.mozilla.org/' + otherRepo + '/pushloghtml">' +
         Config.treeInfo[this._treeName].otherRepo +
         '</a></dd>').appendTo(treeInfo);
       }
@@ -771,7 +771,7 @@ var UserInterface = {
     }
     return text.escapeContent()
            .replace(/(bug\s*|b=)([1-9][0-9]*)\b/ig, buglink)
-           .replace(/(changeset\s*)?([0-9a-f]{12})\b/ig, '<a href="http://hg.mozilla.org/' + Config.treeInfo[this._treeName].primaryRepo + '/rev/$2">$1$2</a>');
+           .replace(/(changeset\s*)?([0-9a-f]{12})\b/ig, '<a href="https://hg.mozilla.org/' + Config.treeInfo[this._treeName].primaryRepo + '/rev/$2">$1$2</a>');
   },
 
   loadBug: function UserInterface_loadBug(elem) {
@@ -1097,7 +1097,7 @@ var UserInterface = {
   },
 
   _changesetURL: function UserInterface__changesetUrl(rev) {
-    return 'http://hg.mozilla.org/' + Config.treeInfo[this._treeName].primaryRepo + '/rev/' + rev;
+    return 'https://hg.mozilla.org/' + Config.treeInfo[this._treeName].primaryRepo + '/rev/' + rev;
   },
 
   _generatePushNode: function UserInterface__generatePushNode(push) {
@@ -1489,7 +1489,7 @@ var UserInterface = {
       '<span>using revision' + (Object.keys(revs).length != 1 ? 's' : '') + ': ' + (function(){
         var ret = [];
         for(var repo in revs) {
-          ret.push('<a href="http://hg.mozilla.org/' + repo + '/rev/' + revs[repo] + '">' + repo + '/' + revs[repo] + '</a>');
+          ret.push('<a href="https://hg.mozilla.org/' + repo + '/rev/' + revs[repo] + '">' + repo + '/' + revs[repo] + '</a>');
         }
         return ret;
       })().join(', ') + '</span>' +
@@ -1530,7 +1530,7 @@ var UserInterface = {
           '<script>\n' +
           'function encode(s) { return escape(s).replace(/=/g, "%3d") }\n' +
           'NetUtils.loadText(' + self._makeJSString(baseURL + result.reftestLogURL) + ',\n' +
-          '                   function(log) { window.location.replace("http://hg.mozilla.org/mozilla-central/raw-file/tip/layout/tools/reftest/reftest-analyzer.xhtml#log=" + encode(encode(log))) },\n' +
+          '                   function(log) { window.location.replace("https://hg.mozilla.org/mozilla-central/raw-file/tip/layout/tools/reftest/reftest-analyzer.xhtml#log=" + encode(encode(log))) },\n' +
           '                   function() { $("p").removeClass("loading").text("Fetching reftest log failed.") },\n' +
           '                   function() { $("p").removeClass("loading").text("Fetching reftest log timed out.") });\n' +
           '</script>';

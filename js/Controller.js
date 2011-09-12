@@ -162,8 +162,8 @@ var Controller = {
       var service = new google.gdata.calendar.CalendarService("mozilla-tinderbox");
 
       var items = {
-        "sheriff": "http://www.google.com/calendar/feeds/j6tkvqkuf9elual8l2tbuk2umk%40group.calendar.google.com/public/full",
-        "releng" : "http://www.google.com/calendar/feeds/aelh98g866kuc80d5nbfqo6u54%40group.calendar.google.com/public/full"
+        "sheriff": "https://www.google.com/calendar/feeds/j6tkvqkuf9elual8l2tbuk2umk%40group.calendar.google.com/public/full",
+        "releng" : "https://www.google.com/calendar/feeds/aelh98g866kuc80d5nbfqo6u54%40group.calendar.google.com/public/full"
       };
 
       function refreshItem(role, url) {

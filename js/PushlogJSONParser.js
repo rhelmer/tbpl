@@ -64,7 +64,7 @@ var PushlogJSONParser = {
   },
 
   _getLogUrl: function PushlogJSONParser__getLogUrl(repoName, params) {
-    var url = "http://hg.mozilla.org/" + repoName + "/json-pushes?full=1";
+    var url = "https://hg.mozilla.org/" + repoName + "/json-pushes?full=1";
     for (var paramName in params) {
       url += "&" + escape(paramName) + "=" + escape(params[paramName]);
     }
