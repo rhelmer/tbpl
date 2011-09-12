@@ -12,14 +12,14 @@ var Config = {
   loadInterval: 120, // seconds
   goBackPushes: 10,
   baseURL: "",
-  absoluteBaseURL: "http://tbpl.mozilla.org/", // used for log links in tbplbot bugzilla comments
+  absoluteBaseURL: "https://tbpl.mozilla.org/", // used for log links in tbplbot bugzilla comments
   useGoogleCalendar: true,
   jsonPendingOrRunningBaseURL: "http://build.mozilla.org/builds/",
   htmlPendingOrRunningBaseURL: "http://build.mozilla.org/buildapi/",
   selfServeAPIBaseURL: "https://build.mozilla.org/buildapi/self-serve",
   alternateTinderboxPushlogURL: "http://build.mozillamessaging.com/tinderboxpushlog/?tree=",
   alternateTinderboxPushlogName: "Mozilla Messaging",
-  wooBugURL: "http://tbpl.mozilla.org/php/starcomment.php", // war-on-orange database
+  wooBugURL: "https://tbpl.mozilla.org/php/starcomment.php", // war-on-orange database
   // treeInfo gives details about the trees and repositories. There are various
   // items that can be specified:
   //

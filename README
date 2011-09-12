@@ -2,19 +2,19 @@ This is Tinderboxpushlog.
 
 Some links:
 
- - official Firefox instance: http://tbpl.mozilla.org/ 
- - repository: http://hg.mozilla.org/users/mstange_themasta.com/tinderboxpushlog/
+ - official Firefox instance: https://tbpl.mozilla.org/
+ - repository: https://hg.mozilla.org/users/mstange_themasta.com/tinderboxpushlog/
  - all bugs: https://bugzilla.mozilla.org/buglist.cgi?product=Webtools&component=Tinderboxpushlog
  - file a bug: https://bugzilla.mozilla.org/enter_bug.cgi?product=Webtools&component=Tinderboxpushlog
 
 Downloading:
 
 Clone the hg repository:
-hg clone http://hg.mozilla.org/users/mstange_themasta.com/tinderboxpushlog/ path/to/tbpl
+hg clone https://hg.mozilla.org/users/mstange_themasta.com/tinderboxpushlog/ path/to/tbpl
 
 Installing:
 
-TBPL has a client-side and a server-side component. Running only the client-side component is really simple, because you can just make it refer to the server-side component that runs on tbpl.mozilla.org. In order to do that, open js/Config.js and change the baseURL to "http://tbpl.mozilla.org/". Then you can open index.html and it will just work (even from the local file system).
+TBPL has a client-side and a server-side component. Running only the client-side component is really simple, because you can just make it refer to the server-side component that runs on tbpl.mozilla.org. In order to do that, open js/Config.js and change the baseURL to "https://tbpl.mozilla.org/". Then you can open index.html and it will just work (even from the local file system).
 
 If you want a standalone instance of TBPL with your own server-side component, the requirements for your server are a little higher. Data is stored in a MySQL database, which is accessed by both python (dataimport/import-buildbot-data.py) and PHP scripts. All in all, you need these things:
 
