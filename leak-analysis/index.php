@@ -6,8 +6,6 @@ if (!isset($_GET["tree"]) || !isset($_GET["id"]))
 if (!preg_match('/^[a-zA-Z0-9\.-]+$/', $_GET["tree"]))
   die("invalid tree");
 
-set_time_limit(120);
-
 echo analyze($_GET["tree"], $_GET["id"]);
 
 function analyze($tree, $id) {

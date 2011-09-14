@@ -9,6 +9,5 @@ php_value memory_limit 2048M
 # It also can take a long time, so allow for 10 minutes
 php_value max_execution_time 600
 
-# Don't display PHP errors.
-php_value error_reporting 0
-php_value display_errors 0
+# Production settings, change for dev environments
+php_value display_errors Off
