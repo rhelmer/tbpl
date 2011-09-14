@@ -37,16 +37,10 @@ var Controller = {
       self._urlChanged();
     };
 
-    // Allow requests using the buildbot branch name instead of the Tinderbox
-    // tree name, but redirect such requests to the tree name form.
+    // If the request URL is not the canonical URL for these params,
+    // redirect to the canonical form.
     // e.g. redirect ?branch=mozilla-1.9.2 to ?tree=Firefox3.6
-    if (!("tree" in params) && ("branch" in params)) {
-      document.location = this.getURLForChangedParams({
-        tree: this._treeForBranch(params.branch),
-        branch: null
-      });
-      return;
-    }
+    this._replaceURLWithCanonicalForm();
 
     if (("usetinderbox" in params) && (params.usetinderbox == "1")) {
       // Override for anyone needing the old tinderbox source
@@ -132,6 +126,18 @@ var Controller = {
     if (history && "pushState" in history) {
       history.pushState({}, "", newURL);
       this._urlChanged();
+    } else {
+      location.href = newURL;
+    }
+  },
+
+  _replaceURLWithCanonicalForm: function Controller__replaceURLWithCanonicalForm() {
+    var newURL = this._getURLForParams(this._params);
+    if (location.search == newURL)
+      return; // already canonical
+
+    if (history && "replaceState" in history) {
+      history.replaceState({}, "", newURL);
     } else {
       location.href = newURL;
     }
@@ -250,6 +256,14 @@ var Controller = {
         }
       }
     }
+
+    // Allow requests using the buildbot branch name instead of the Tinderbox
+    // tree name.
+    if (!("tree" in params) && ("branch" in params)) {
+      params.tree = this._treeForBranch(params.branch);
+      delete params.branch;
+    }
+
     for (var key in this._paramDefaults) {
       if (!(key in params))
         params[key] = this._paramDefaults[key];
