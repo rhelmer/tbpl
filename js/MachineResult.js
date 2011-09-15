@@ -57,7 +57,7 @@ MachineResult.prototype = {
 
   _getScrapeResults: function MachineResult__getScrapeResults(scrape) {
     return $(scrape).map(function parseGenericTestScrapeLine() {
-      if (this.match(/rev\:/) || this.match(/s\:/) || this.match(/try\-/))
+      if (this.match(/rev(ision)?\:/))
         return null;
       var match = this.match(/(.*)(\:|<br\/>)(.*)/);
       return (match ? { name: match[1], result: match[3]} : { name: this });
