@@ -26,9 +26,11 @@ Data.prototype = {
       return callback(this._bugcache[id]);
     var self = this;
     $.getJSON("https://api-dev.bugzilla.mozilla.org/latest/bug?id=" + id, function (data) {
-      if (data.bugs && data.bugs[0]) {
-        self._bugcache[id] = data.bugs[0];
-        callback(data.bugs[0]);
+      if (data.bugs) {
+        self._bugcache[id] = data.bugs.length ?
+          {status: data.bugs[0].status, summary: data.bugs[0].summary} : 
+          {status: "UNKNOWN", summary: "The bug is inaccessible or doesn’t exist."};
+        callback(self._bugcache[id]);
       }
     });
   },
