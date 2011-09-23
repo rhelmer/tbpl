@@ -114,11 +114,11 @@ class Run(object):
         }
         if self._props["branch"] == "try":
             data["pusher"] = try_pusher(self._rev)
-            if all(data.values()):
+            if not [v for v in data.values() if v is None or v == '']:
                 return log_path_try.substitute(data)
         elif "buildid" in self._props:
             data["buildid"] = buildidnumber(self._props["buildid"])
-            if all(data.values()):
+            if not [v for v in data.values() if v is None or v == '']:
                 return log_path_other.substitute(data)
         return None
 
