@@ -82,6 +82,7 @@ var Config = {
     "Electrolysis": {
       primaryRepo: "projects/electrolysis",
       hasGroups: true,
+      buildbotBranch: "electrolysis",
     },
     "Places": {
       primaryRepo: "projects/places",
