@@ -659,7 +659,7 @@ function Machine(data) {
 Machine.prototype = {
   getShortDescription: function Machine_getShortDescription() {
     var number = this.machineNumber();
-    return this.type + (number ? " " + number : "") + this.flavor;
+    return this.type + (number ? " " + number : "") + " " + this.flavor;
   },
 
   getShortDescriptionWithOS: function Machine_getShortDescriptionWithOS() {
