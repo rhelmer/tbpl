@@ -525,6 +525,7 @@ Data.prototype = {
         /crashtest-ipc/.test(name) ? "Crashtest-IPC" :
         /crashtest/i.test(name) ? "Crashtest" :
         /jsreftest/i.test(name) ? "JSReftest" :
+        /opengl/i.test(name) ? "Reftest-OpenGL" :
         /reftest-no-accel/i.test(name) ? "Reftest Unaccelerated" :
         /reftest-ipc/i.test(name) ? "Reftest-IPC" :
         /reftest/i.test(name) ? "Reftest" :
