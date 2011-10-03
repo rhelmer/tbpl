@@ -360,25 +360,23 @@ Data.prototype = {
   _addResultToPush: function Data__addResultToPush(result) {
     var push = result.push;
     var machine = result.machine;
-    var debug = machine.debug ? "debug" : "opt";
     var group = this.machineGroup(machine.type);
     if (!push.results)
       push.results = {};
     if (!push.results[machine.os])
       push.results[machine.os] = {};
-    if (!push.results[machine.os][debug])
-      push.results[machine.os][debug] = {};
-    if (!push.results[machine.os][debug][group])
-      push.results[machine.os][debug][group] = [];
-    push.results[machine.os][debug][group].push(result);
+    if (!push.results[machine.os][machine.flavor])
+      push.results[machine.os][machine.flavor] = {};
+    if (!push.results[machine.os][machine.flavor][group])
+      push.results[machine.os][machine.flavor][group] = [];
+    push.results[machine.os][machine.flavor][group].push(result);
   },
 
   _removeResultFromPush: function Data__removeResultFromPush(result, updatedPushes) {
     var push = result.push;
     var machine = result.machine;
-    var debug = machine.debug ? "debug" : "opt";
     var group = this.machineGroup(machine.type);
-    var grouparr = push.results[machine.os][debug][group];
+    var grouparr = push.results[machine.os][machine.flavor][group];
     for (var i in grouparr) {
       if (grouparr[i].runID == result.runID) {
         grouparr.splice(i, 1);
@@ -505,7 +503,9 @@ Data.prototype = {
         /xp/i.test(name) ? "windowsxp" :
         /static-analysis/.test(name) ? "linux" : "";
 
-      var debug = /debug/i.test(name) || /(leak|bloat)/i.test(name);
+      var flavor = /pgo/i.test(name) ? "pgo" :
+                   /(debug|leak|bloat)/i.test(name) ? "debug" :
+                   "opt";
 
       // see Config.testNames and Config.buildNames
       var type =
@@ -546,7 +546,7 @@ Data.prototype = {
         name: name,
         os: os,
         type: type,
-        debug: debug,
+        flavor: flavor,
         latestFinishedRun: null,
         runs: 0,
         runtime: 0,
@@ -659,7 +659,7 @@ function Machine(data) {
 Machine.prototype = {
   getShortDescription: function Machine_getShortDescription() {
     var number = this.machineNumber();
-    return this.type + (number ? " " + number : "") + (this.debug ? " debug" : " opt");
+    return this.type + (number ? " " + number : "") + this.flavor;
   },
 
   getShortDescriptionWithOS: function Machine_getShortDescriptionWithOS() {

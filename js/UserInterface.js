@@ -516,7 +516,7 @@ var UserInterface = {
     var self = this;
     var results = [];
     var oses = Object.keys(Config.OSNames);
-    var types = ['debug', 'opt'];
+    var flavors = ['debug', 'opt', 'pgo'];
     var groups = Object.keys(Config.resultNames);
 
     var pushes = Object.values(this._data.getPushes());
@@ -533,15 +533,15 @@ var UserInterface = {
         if (!push.results[os])
           return;
 
-        types.forEach(function (type) {
-          if (!push.results[os][type])
+        flavors.forEach(function (flavor) {
+          if (!push.results[os][flavor])
             return;
 
           groups.forEach(function (group) {
-            if (!push.results[os][type][group])
+            if (!push.results[os][flavor][group])
               return;
 
-            push.results[os][type][group].forEach(function (result) {
+            push.results[os][flavor][group].forEach(function (result) {
               results.push(result);
             });
           });
@@ -580,7 +580,7 @@ var UserInterface = {
     var results = {};
     var pushes = Object.values(this._data.getPushes());
     var oses = Object.keys(Config.OSNames);
-    var types = ['debug', 'opt'];
+    var flavors = ['debug', 'opt', 'pgo'];
     var groups = Object.keys(Config.resultNames);
 
     for (var i = pushes.length-1; i >= 0; --i) {
@@ -596,18 +596,18 @@ var UserInterface = {
         if (!pushes[i].results[os]) {
           continue;
         }
-        for (var y = 0; y < types.length; ++y) {
-          var type = types[y];
-          if (!pushes[i].results[os][type]) {
+        for (var y = 0; y < flavors.length; ++y) {
+          var flavor = flavors[y];
+          if (!pushes[i].results[os][flavor]) {
             continue;
           }
           for (var z = 0; z < groups.length; ++z) {
             var group = groups[z];
-            if (!pushes[i].results[os][type][group]) {
+            if (!pushes[i].results[os][flavor][group]) {
               continue;
             }
-            for (var j = 0; j < pushes[i].results[os][type][group].length; ++j) {
-              var result = pushes[i].results[os][type][group][j];
+            for (var j = 0; j < pushes[i].results[os][flavor][group].length; ++j) {
+              var result = pushes[i].results[os][flavor][group][j];
               var key = result.machine.name;
 
               if ((result.state == "pending" || result.state == "retry" ||
@@ -1005,7 +1005,7 @@ var UserInterface = {
     return filteredResults;
   },
 
-  _buildHTMLForOS: function UserInterface__buildHTMLForOS(os, debug, results, order) {
+  _buildHTMLForOS: function UserInterface__buildHTMLForOS(os, flavorSuffix, results, order) {
     var self = this;
 
     // Sort finished before running before pending results, and then via start
@@ -1060,7 +1060,7 @@ var UserInterface = {
     if (!oshtml)
       return '';
 
-    return '<li><span class="os ' + os + '">' + (Config.OSNames[os] + debug).escapeContent() +
+    return '<li><span class="os ' + os + '">' + (Config.OSNames[os] + flavorSuffix).escapeContent() +
     '</span><span class="osresults">' + oshtml + '</span></li>';
   },
 
@@ -1071,6 +1071,7 @@ var UserInterface = {
       if (!push.results || !push.results[os])
         return '';
       return (push.results[os].opt   ? self._buildHTMLForOS(os, " opt"  , push.results[os].opt  , order) : '') +
+             (push.results[os].pgo   ? self._buildHTMLForOS(os, " pgo"  , push.results[os].pgo  , order) : '') +
              (push.results[os].debug ? self._buildHTMLForOS(os, " debug", push.results[os].debug, order) : '');
     }).join("\n");
   },
