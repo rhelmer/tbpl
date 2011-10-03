@@ -54,11 +54,6 @@ var Config = {
       hasGroups: true,
       buildbotBranch: "mozilla-inbound",
     },
-    "Firefox4.0": {
-      primaryRepo: "releases/mozilla-2.0",
-      hasGroups: true,
-      buildbotBranch: "mozilla-2.0",
-    },
     "Firefox3.6": {
       primaryRepo: "releases/mozilla-1.9.2",
       buildbotBranch: "mozilla-1.9.2",
@@ -66,12 +61,6 @@ var Config = {
     "Firefox3.5": {
       primaryRepo: "releases/mozilla-1.9.1",
       buildbotBranch: "mozilla-1.9.1",
-    },
-    "TraceMonkey": {
-      primaryRepo: "tracemonkey",
-      hasGroups: true,
-      orangeFactor: true,
-      buildbotBranch: "tracemonkey",
     },
     "Jaegermonkey": {
       primaryRepo: "projects/jaegermonkey",
@@ -95,12 +84,6 @@ var Config = {
       otherRepo: "mobile-browser",
       hasGroups: true,
       buildbotBranch: "mozilla-central",
-    },
-    "Mobile2.0": {
-      primaryRepo: "releases/mozilla-2.1",
-      otherRepo: "releases/mobile-2.0",
-      hasGroups: true,
-      buildbotBranch: "mozilla-2.1",
     },
     "Try": {
       primaryRepo: "try",
