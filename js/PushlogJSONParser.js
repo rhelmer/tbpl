@@ -17,7 +17,7 @@ var PushlogJSONParser = {
           var push = data[pushID];
 
           var patches = [];
-          var defaultTip;
+          var defaultTip = null;
           for (var i in push.changesets) {
             var patch = push.changesets[i];
             patch.rev = patch.node.substr(0, 12);

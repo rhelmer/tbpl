@@ -13,6 +13,9 @@ var BuildbotDBUser = {
       urlPrefix += '&noignore=1';
     forPushes.reverse(); // Load recent pushes first.
     forPushes.forEach(function (push) {
+      if (!push.defaultTip)
+        return;
+
       loadTracker.addTrackedLoad();
       $.ajax({
         url: urlPrefix + '&rev=' + push.defaultTip,
