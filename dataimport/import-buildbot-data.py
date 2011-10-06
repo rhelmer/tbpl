@@ -168,6 +168,10 @@ def get_runs(j):
         # some builds (which?) have no revision field, some (like fuzzer)
         # have null in the JSON, which turns into None in python, and some
         # (like addontester) have "None" in the JSON.
+        # |revision| is the revision the job got requested with and
+        # |got_revision| is the one that was finally used, so prefer that.
+        if p.get("got_revision"):
+            p["revision"] = p.get("got_revision")
         if not p.get("revision") or not p.get("branch"):
             # Builds with no revision/branch aren't of interest.
             continue
