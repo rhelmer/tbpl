@@ -34,6 +34,8 @@ MachineResult.prototype = {
     if (!scrape)
       return [];
     return (function callRightScrapeParser(fun) {
+      if (/talos/i.test(machine.type))
+        return self._getTalosResults.call(self, scrape);
       return (fun[machine.type] ? fun[machine.type] : fun.generic).call(self, scrape);
     })({
       "Unit Test": self._getUnitTestResults,

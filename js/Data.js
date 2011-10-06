@@ -509,6 +509,23 @@ Data.prototype = {
 
       // see Config.testNames and Config.buildNames
       var type =
+        /talos.*xperf$/i.test(name) ? "Talos xperf" :
+        /talos.*tsspider$/i.test(name) ? "Talos sspider" :
+        /talos.*twinopen$/i.test(name) ? "Talos winopen" :
+        /talos.*tpan$/i.test(name) ? "Talos pan" :
+        /talos.*tdhtml$/i.test(name) ? "Talos dhtml" :
+        /talos.*ts$/i.test(name) ? "Talos ts" :
+        /talos.*tzoom$/i.test(name) ? "Talos zoom" :
+        /talos.*dromaeo$/i.test(name) ? "Talos dromaeo" :
+        /talos.*svg$/i.test(name) ? "Talos svg" :
+        /talos.*tp4m_nochrome$/i.test(name) ? "Talos tp nochrome" :
+        /talos.*tp4m$/i.test(name) ? "Talos tp" :
+        /talos.*nochrome$/i.test(name) ? "Talos nochrome" :
+        /talos.*tp4$/i.test(name) ? "Talos tp4" :
+        /talos.*tp$/i.test(name) ? "Talos tp" :
+        /talos.*dirty$/i.test(name) ? "Talos dirty" :
+        /talos.*chrome(_mac)?$/i.test(name) ? "Talos chrome" :
+        /talos.*paint$/i.test(name) ? "Talos paint" :
         /talos/i.test(name) ? "Talos Performance" :
         /mobile desktop .* nightly/i.test(name) ? "Mobile Desktop Nightly" :
         /maemo .* qt .* nightly/i.test(name) ? "Maemo Qt Nightly" :
