@@ -231,7 +231,7 @@ var Config = {
     "Unit Test" : "U"
   },
   talosTestNames: [
-   " a11y",
+    "a11y",
     "tdhtml",
     "tdhtml_nochrome",
     "tp4",
