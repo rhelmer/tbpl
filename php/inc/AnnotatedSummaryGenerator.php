@@ -24,7 +24,6 @@ class AnnotatedSummaryGenerator implements FileGenerator {
     $file = GzipUtils::getLines($this->rawSummaryFilename);
     $lines = array();
     foreach ($file as $line) {
-      $lines[] = $line;
       $this->processLine($lines, $line);
     }
     GzipUtils::writeToFile($filename, implode("", $lines));
@@ -38,7 +37,7 @@ class AnnotatedSummaryGenerator implements FileGenerator {
 
   protected function generateSuggestion($bug, $line) {
     $bug->summary = htmlspecialchars($bug->summary);
-    $line = htmlspecialchars(strip_tags($line));
+    $line = htmlspecialchars($line);
     return "<span data-bugid=\"$bug->id\" " .
                  "data-summary=\"$bug->summary\" " .
                  "data-signature=\"$this->logDescription\" " .
@@ -48,6 +47,8 @@ class AnnotatedSummaryGenerator implements FileGenerator {
   }
 
   protected function processLine(&$lines, $line) {
+    $lines[] = htmlspecialchars($line);
+
     $tokens = preg_split("/\s\\|\s/", $line);
     if (count($tokens) < 3)
       return;
