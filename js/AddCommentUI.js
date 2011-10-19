@@ -312,7 +312,7 @@ var AddCommentUI = {
               (d.getUTCMonth() < 9 ? "0" : "") + (d.getUTCMonth() + 1) + "-" +
               (d.getUTCDate() < 10 ? "0" : "") + d.getUTCDate(),
         type: machineResult.machine.type,
-        debug: machineResult.machine.debug,
+        buildtype: machineResult.machine.flavor,
         starttime: machineResult.startTime.getTime() / 1000,
         logfile: machineResult.runID,
         tree: Config.treeInfo[machineResult.tree].primaryRepo,
