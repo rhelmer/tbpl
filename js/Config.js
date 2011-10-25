@@ -140,6 +140,26 @@ var Config = {
       hasGroups: true,
       buildbotBranch: "larch",
     },
+    "Ash": {
+      primaryRepo: "projects/ash",
+      hasGroups: true,
+      buildbotBranch: "ash",
+    },
+    "Elm": {
+      primaryRepo: "projects/elm",
+      hasGroups: true,
+      buildbotBranch: "elm",
+    },
+    "Oak": {
+      primaryRepo: "projects/oak",
+      hasGroups: true,
+      buildbotBranch: "oak",
+    },
+    "Pine": {
+      primaryRepo: "projects/pine",
+      hasGroups: true,
+      buildbotBranch: "pine",
+    },
     "Accessibility": {
       primaryRepo: "projects/accessibility",
       hasGroups: true,
