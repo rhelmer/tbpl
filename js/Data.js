@@ -481,6 +481,7 @@ Data.prototype = {
         /fedora.*64/i.test(name) ? "linux64" :
         /linux/i.test(name) ? "linux" :
         /fedora/i.test(name) ? "linux" :
+        /OS\s?X.*10\.7/.test(name) ? "osxlion" :
         /macosx64/.test(name) ? "osx64" :
         /snowleopard/.test(name) ? "osx64" :
         /OS\s?X.*10\.6/.test(name) ? "osx64" :

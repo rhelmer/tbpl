@@ -216,6 +216,7 @@ var Config = {
     "linux64": "Linux64",
     "osx":"OS X",
     "osx64": "OS X64",
+    "osxlion" : "OS X 10.7",
     "windows": "Win",
     "windows7-64": "Win64",
     "windowsxp": "WinXP",
