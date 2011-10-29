@@ -705,6 +705,11 @@ Machine.prototype = {
     if (match)
       return match[1];
 
+    // Mobile split crashtests
+    match = /crashtest\-([1-9])/.exec(this.name);
+    if (match)
+      return match[1];
+
     if (this.name.match(/unit chrome/))
       return "c";
 
