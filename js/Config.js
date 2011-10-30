@@ -37,11 +37,15 @@ var Config = {
       orangeFactor: true,
       buildbotBranch: "mozilla-central",
     },
-    "Mozilla-Beta": {
-      primaryRepo: "releases/mozilla-beta",
+    "Mozilla-Inbound": {
+      primaryRepo: "integration/mozilla-inbound",
       hasGroups: true,
-      orangeFactor: true,
-      buildbotBranch: "mozilla-beta",
+      buildbotBranch: "mozilla-inbound",
+    },
+    "Try": {
+      primaryRepo: "try",
+      hasGroups: true,
+      buildbotBranch: "try",
     },
     "Mozilla-Aurora": {
       primaryRepo: "releases/mozilla-aurora",
@@ -49,46 +53,27 @@ var Config = {
       orangeFactor: true,
       buildbotBranch: "mozilla-aurora",
     },
-    "Mozilla-Inbound": {
-      primaryRepo: "integration/mozilla-inbound",
+    "Mozilla-Beta": {
+      primaryRepo: "releases/mozilla-beta",
       hasGroups: true,
-      buildbotBranch: "mozilla-inbound",
+      orangeFactor: true,
+      buildbotBranch: "mozilla-beta",
+    },
+    "Mozilla-Release": {
+      primaryRepo: "releases/mozilla-release",
+      hasGroups: true,
+      buildbotBranch: "mozilla-release",
     },
     "Firefox3.6": {
       primaryRepo: "releases/mozilla-1.9.2",
       buildbotBranch: "mozilla-1.9.2",
     },
-    "Firefox3.5": {
-      primaryRepo: "releases/mozilla-1.9.1",
-      buildbotBranch: "mozilla-1.9.1",
-    },
-    "Jaegermonkey": {
-      primaryRepo: "projects/jaegermonkey",
+    // project/integration branches
+    "Jetpack": {
+      primaryRepo: "projects/addon-sdk",
       hasGroups: true,
-      buildbotBranch: "jaegermonkey",
-      prettierName: "JägerMonkey",
-    },
-    "Electrolysis": {
-      primaryRepo: "projects/electrolysis",
-      hasGroups: true,
-      buildbotBranch: "electrolysis",
-    },
-    "Places": {
-      primaryRepo: "projects/places",
-      hasGroups: true,
-      orangeFactor: true,
-      buildbotBranch: "places",
-    },
-    "Mobile": {
-      primaryRepo: "mozilla-central",
-      otherRepo: "mobile-browser",
-      hasGroups: true,
-      buildbotBranch: "mozilla-central",
-    },
-    "Try": {
-      primaryRepo: "try",
-      hasGroups: true,
-      buildbotBranch: "try",
+      buildbotBranch: "addon-sdk",
+      prettierName: "Addon-SDK",
     },
     "Build-System": {
       primaryRepo: "projects/build-system",
@@ -100,15 +85,52 @@ var Config = {
       hasGroups: true,
       buildbotBranch: "devtools",
     },
+    "Electrolysis": {
+      primaryRepo: "projects/electrolysis",
+      hasGroups: true,
+      buildbotBranch: "electrolysis",
+    },
+    "Fx-Team": {
+      primaryRepo: "integration/fx-team",
+      hasGroups: true,
+      buildbotBranch: "fx-team",
+    },
     "Graphics": {
       primaryRepo: "projects/graphics",
       hasGroups: true,
       buildbotBranch: "graphics",
     },
+    "Ionmonkey": {
+      primaryRepo: "projects/ionmonkey",
+      hasGroups: true,
+      buildbotBranch: "ionmonkey",
+    },
+    "Jaegermonkey": {
+      primaryRepo: "projects/jaegermonkey",
+      hasGroups: true,
+      buildbotBranch: "jaegermonkey",
+      prettierName: "JägerMonkey",
+    },
     "Services-Central": {
       primaryRepo: "services/services-central",
       hasGroups: true,
       buildbotBranch: "services-central",
+    },
+    "UX": {
+      primaryRepo: "projects/ux",
+      hasGroups: true,
+      buildbotBranch: "ux",
+    },
+    // rental twigs
+    "Alder": {
+      primaryRepo: "projects/alder",
+      hasGroups: true,
+      buildbotBranch: "alder",
+    },
+    "Ash": {
+      primaryRepo: "projects/ash",
+      hasGroups: true,
+      buildbotBranch: "ash",
     },
     "Birch": {
       primaryRepo: "projects/birch",
@@ -120,15 +142,10 @@ var Config = {
       hasGroups: true,
       buildbotBranch: "cedar",
     },
-    "Maple": {
-      primaryRepo: "projects/maple",
+    "Elm": {
+      primaryRepo: "projects/elm",
       hasGroups: true,
-      buildbotBranch: "maple",
-    },
-    "Alder": {
-      primaryRepo: "projects/alder",
-      hasGroups: true,
-      buildbotBranch: "alder",
+      buildbotBranch: "elm",
     },
     "Holly": {
       primaryRepo: "projects/holly",
@@ -140,15 +157,10 @@ var Config = {
       hasGroups: true,
       buildbotBranch: "larch",
     },
-    "Ash": {
-      primaryRepo: "projects/ash",
+    "Maple": {
+      primaryRepo: "projects/maple",
       hasGroups: true,
-      buildbotBranch: "ash",
-    },
-    "Elm": {
-      primaryRepo: "projects/elm",
-      hasGroups: true,
-      buildbotBranch: "elm",
+      buildbotBranch: "maple",
     },
     "Oak": {
       primaryRepo: "projects/oak",
@@ -160,41 +172,32 @@ var Config = {
       hasGroups: true,
       buildbotBranch: "pine",
     },
+    // deathwatch
     "Accessibility": {
       primaryRepo: "projects/accessibility",
       hasGroups: true,
       buildbotBranch: "accessibility",
     },
+    "Firefox3.5": {
+      primaryRepo: "releases/mozilla-1.9.1",
+      buildbotBranch: "mozilla-1.9.1",
+    },
+    "Mobile": {
+      primaryRepo: "mozilla-central",
+      otherRepo: "mobile-browser",
+      hasGroups: true,
+      buildbotBranch: "mozilla-central",
+    },
+    "Places": {
+      primaryRepo: "projects/places",
+      hasGroups: true,
+      orangeFactor: true,
+      buildbotBranch: "places",
+    },
     "Private-Browsing": {
       primaryRepo: "projects/private-browsing",
       hasGroups: true,
       buildbotBranch: "private-browsing",
-    },
-    "UX": {
-      primaryRepo: "projects/ux",
-      hasGroups: true,
-      buildbotBranch: "ux",
-    },
-    "Jetpack": {
-      primaryRepo: "projects/addon-sdk",
-      hasGroups: true,
-      buildbotBranch: "addon-sdk",
-      prettierName: "Addon-SDK",
-    },
-    "Mozilla-Release": {
-      primaryRepo: "releases/mozilla-release",
-      hasGroups: true,
-      buildbotBranch: "mozilla-release",
-    },
-    "Fx-Team": {
-      primaryRepo: "integration/fx-team",
-      hasGroups: true,
-      buildbotBranch: "fx-team",
-    },
-    "Ionmonkey": {
-      primaryRepo: "projects/ionmonkey",
-      hasGroups: true,
-      buildbotBranch: "ionmonkey",
     },
   },
   groupedMachineTypes: {
