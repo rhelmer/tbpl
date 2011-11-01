@@ -134,8 +134,6 @@ class Run(object):
             dir += "-debug"
         # another inconsistency: android logs are in special directories
         dir = dir.replace("mobile-browser-android", "android-r7")
-        if self._props["branch"] in ["mozilla-1.9.1", "mozilla-1.9.2"] and "-unittest" in self._builder:
-            dir += "-unittest"
         return dir
 
     def _verify_existence_of_log(self, logurl):
