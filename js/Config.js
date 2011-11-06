@@ -211,7 +211,7 @@ var Config = {
     "Talos Performance" : ["Talos sspider", "Talos winopen", "Talos pan",
       "Talos dhtml", "Talos ts", "Talos zoom", "Talos dromaeo", "Talos svg",
       "Talos tp nochrome", "Talos tp", "Talos tp4", "Talos nochrome",
-      "Talos dirty", "Talos chrome", "Talos paint", "Talos xperf",
+      "Talos dirty", "Talos chrome", "Talos paint", "Talos xperf", "Talos v8",
       "Talos Performance"]
   },
   OSNames: {
@@ -254,6 +254,7 @@ var Config = {
     "JSReftest" : "J",
     "XPCShellTest" : "X",
     "Talos Performance" : "T",
+    "Talos v8" : "v",
     "Talos dromaeo" : "dr",
     "Talos svg" : "s",
     "Talos nochrome" : "n",

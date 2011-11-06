@@ -527,6 +527,7 @@ Data.prototype = {
         /talos.*dirty$/i.test(name) ? "Talos dirty" :
         /talos.*chrome(_mac)?$/i.test(name) ? "Talos chrome" :
         /talos.*paint$/i.test(name) ? "Talos paint" :
+        /talos.*v8$/i.test(name) ? "Talos v8" :
         /talos/i.test(name) ? "Talos Performance" :
         /mobile desktop .* nightly/i.test(name) ? "Mobile Desktop Nightly" :
         /maemo .* qt .* nightly/i.test(name) ? "Maemo Qt Nightly" :
