@@ -552,6 +552,14 @@ Data.prototype = {
         /(linux|maemo .*) qt/i.test(name) ? "Qt Build" :
         /mobile desktop/i.test(name) ? "Mobile Desktop Build" :
         /build/i.test(name) ? "Build" :
+        // The Jetpack tree runs tests from multiple branches, with names like
+        // "jetpack-mozilla-central-fedora-opt"
+        /jetpack-mozilla-central/i.test(name) ? "Jetpack mozilla-central" :
+        /jetpack-mozilla-aurora/i.test(name) ? "Jetpack mozilla-aurora" :
+        /jetpack-mozilla-beta/i.test(name) ? "Jetpack mozilla-beta" :
+        /jetpack-mozilla-release/i.test(name) ? "Jetpack mozilla-release" :
+        // While on other trees, Jetpack tests have names more like
+        // "Rev3 Fedora 12 mozilla-central opt test jetpack"
         /jetpack/i.test(name) ? "Jetpack SDK Test" :
         /mozmill-all/i.test(name) ? "Mozmill" :
         /valgrind/i.test(name) ? "Valgrind" :
