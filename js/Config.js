@@ -7,8 +7,8 @@ var Config = {
   tinderboxDataLoader: BuildbotDBUser,
   pushlogDataLoader: PushlogJSONParser,
   defaultTreeName: "Firefox",
-  mvtTimezoneOffset: -7,
-  mvtTimezoneName: "PDT",
+  mvtTimezoneOffset: -8,
+  mvtTimezoneName: "PST",
   loadInterval: 120, // seconds
   goBackPushes: 10,
   baseURL: "",
