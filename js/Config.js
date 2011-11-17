@@ -223,6 +223,7 @@ var Config = {
     "windows": "Win",
     "windows7-64": "Win64",
     "windowsxp": "WinXP",
+    "android-xul": "Android XUL",
     "android": "Android",
     "maemo4": "Maemo 4",
     "maemo5": "Maemo 5"

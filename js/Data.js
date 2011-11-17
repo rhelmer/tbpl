@@ -496,6 +496,7 @@ Data.prototype = {
         /win32/.test(name) ? "windows" :
         /WINNT 6\.1/i.test(name) ? "windows" :
         /WINNT 5\.2/i.test(name) ? "windows" :
+        /android xul/i.test(name) ? "android-xul" :
         /android/i.test(name) ? "android" :
         /Maemo 5/.test(name) ? "maemo5" :
         /Maemo/.test(name) ? "maemo4" :
