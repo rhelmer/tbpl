@@ -178,16 +178,6 @@ var Config = {
       hasGroups: true,
       buildbotBranch: "accessibility",
     },
-    "Firefox3.5": {
-      primaryRepo: "releases/mozilla-1.9.1",
-      buildbotBranch: "mozilla-1.9.1",
-    },
-    "Mobile": {
-      primaryRepo: "mozilla-central",
-      otherRepo: "mobile-browser",
-      hasGroups: true,
-      buildbotBranch: "mozilla-central",
-    },
     "Places": {
       primaryRepo: "projects/places",
       hasGroups: true,
