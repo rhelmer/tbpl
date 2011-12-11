@@ -526,6 +526,7 @@ Data.prototype = {
         /talos.*nochrome$/i.test(name) ? "Talos nochrome" :
         /talos.*tp4$/i.test(name) ? "Talos tp4" :
         /talos.*tp$/i.test(name) ? "Talos tp" :
+        /talos.*tp_responsiveness$/i.test(name) ? "Talos tp" :
         /talos.*dirty$/i.test(name) ? "Talos dirty" :
         /talos.*chrome(_mac)?$/i.test(name) ? "Talos chrome" :
         /talos.*paint$/i.test(name) ? "Talos paint" :
