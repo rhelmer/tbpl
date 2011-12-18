@@ -482,7 +482,6 @@ Data.prototype = {
         /linux/i.test(name) ? "linux" :
         /fedora/i.test(name) ? "linux" :
         /OS\s?X.*10\.7/.test(name) ? "osxlion" :
-        /lion/.test(name) ? "osxlion" :
         /macosx64/.test(name) ? "osx64" :
         /snowleopard/.test(name) ? "osx64" :
         /OS\s?X.*10\.6/.test(name) ? "osx64" :
@@ -526,7 +525,6 @@ Data.prototype = {
         /talos.*nochrome$/i.test(name) ? "Talos nochrome" :
         /talos.*tp4$/i.test(name) ? "Talos tp4" :
         /talos.*tp$/i.test(name) ? "Talos tp" :
-        /talos.*tp_responsiveness$/i.test(name) ? "Talos tp" :
         /talos.*dirty$/i.test(name) ? "Talos dirty" :
         /talos.*chrome(_mac)?$/i.test(name) ? "Talos chrome" :
         /talos.*paint$/i.test(name) ? "Talos paint" :
