@@ -184,10 +184,10 @@ var Config = {
       orangeFactor: true,
       buildbotBranch: "places",
     },
-    "Private-Browsing": {
-      primaryRepo: "projects/private-browsing",
+    "Profiling": {
+      primaryRepo: "projects/profiling",
       hasGroups: true,
-      buildbotBranch: "private-browsing",
+      buildbotBranch: "profiling",
     },
   },
   groupedMachineTypes: {
