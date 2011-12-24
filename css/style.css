@@ -733,8 +733,10 @@ em.testfail {
 }
 .popupForm:nth-child(1n) {
   -moz-border-image: url(../images/hudborderimage.png) 10 18 25 repeat;
+  -moz-border-image: url(../images/hudborderimage.png) 10 18 25 fill repeat;
   -webkit-border-image: url(../images/hudborderimage.png) 10 18 25 repeat;
-  border-image: url(../images/hudborderimage.png) 10 18 25 repeat;
+  -webkit-border-image: url(../images/hudborderimage.png) 10 18 25 fill repeat;
+  border-image: url(../images/hudborderimage.png) 10 18 25 fill repeat;
   background: transparent;
 }
 #bar:nth-child(1n) { /* Preload the border image (XXX hack) */
