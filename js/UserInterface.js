@@ -1517,7 +1517,7 @@ var UserInterface = {
       })() +
       (function htmlForReftests() {
         if (result.state == 'running' || result.state == 'pending' ||
-            result.machine.type != 'Reftest') {
+            !/^Reftest/.test(result.machine.type)) {
           return '';
         }
         var baseURL = Config.baseURL || document.baseURI.replace(/\/[^\/]+$/, '/');
