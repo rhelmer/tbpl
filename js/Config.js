@@ -80,16 +80,6 @@ var Config = {
       hasGroups: true,
       buildbotBranch: "build-system",
     },
-    "Devtools": {
-      primaryRepo: "projects/devtools",
-      hasGroups: true,
-      buildbotBranch: "devtools",
-    },
-    "Electrolysis": {
-      primaryRepo: "projects/electrolysis",
-      hasGroups: true,
-      buildbotBranch: "electrolysis",
-    },
     "Fx-Team": {
       primaryRepo: "integration/fx-team",
       hasGroups: true,
@@ -110,6 +100,11 @@ var Config = {
       hasGroups: true,
       buildbotBranch: "jaegermonkey",
       prettierName: "JägerMonkey",
+    },
+    "Profiling": {
+      primaryRepo: "projects/profiling",
+      hasGroups: true,
+      buildbotBranch: "profiling",
     },
     "Services-Central": {
       primaryRepo: "services/services-central",
@@ -178,16 +173,21 @@ var Config = {
       hasGroups: true,
       buildbotBranch: "accessibility",
     },
+    "Devtools": {
+      primaryRepo: "projects/devtools",
+      hasGroups: true,
+      buildbotBranch: "devtools",
+    },
+    "Electrolysis": {
+      primaryRepo: "projects/electrolysis",
+      hasGroups: true,
+      buildbotBranch: "electrolysis",
+    },
     "Places": {
       primaryRepo: "projects/places",
       hasGroups: true,
       orangeFactor: true,
       buildbotBranch: "places",
-    },
-    "Profiling": {
-      primaryRepo: "projects/profiling",
-      hasGroups: true,
-      buildbotBranch: "profiling",
     },
   },
   groupedMachineTypes: {
