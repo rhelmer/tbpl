@@ -17,7 +17,7 @@ var Controller = {
   _paramOverrides: {
     // stronger: [weaker1, weaker2, ...]
     // A param change to a stronger param will unset all its weaker params.
-    "tree": ["rev", "pusher", "onlyunstarred", "jobname"],
+    "tree": ["rev", "pusher", "onlyunstarred", "jobname", "usetinderbox"],
     "rev": ["pusher"],
   },
   _paramDefaults: {
