@@ -39,7 +39,6 @@ MachineResult.prototype = {
       return (fun[machine.type] ? fun[machine.type] : fun.generic).call(self, scrape);
     })({
       "Unit Test": self._getUnitTestResults,
-      "Mochitest": self._getUnitTestResults,
       "Everythingelse Test": self._getUnitTestResults,
       "Talos Performance": self._getTalosResults,
       "Build": self._getScrapeResults,
