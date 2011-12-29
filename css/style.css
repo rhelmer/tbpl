@@ -311,7 +311,7 @@ a.machineResult {
 .busted     { color: #D00 !important; }
 .exception  { color: #708 !important; }
 .running    { color: #999 !important; }
-.pending    { color: #DDD !important; }
+.pending    { color: #DDD; font-style: italic; !important; }
 .retry      { color: #00C !important; }
 .unknown    { color: #000 !important; }
 
