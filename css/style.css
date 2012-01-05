@@ -567,6 +567,9 @@ body.details > #details
   -moz-column-width: 40em;
   -webkit-column-width: 40em;
   column-width: 40em;
+  -moz-column-fill: auto;
+  -webkit-column-fill: auto;
+  column-fill: auto;
 }
 
 #results > ul {
