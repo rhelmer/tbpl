@@ -221,6 +221,8 @@ var Config = {
   buildNames: {
     "Build" : "B",
     "Qt Build" : "Bq",
+    "Qt XULRunner" : "Xrq",
+    "XULRunner" : "Xr",
     "Mobile Desktop Build" : "Bm",
     "SpiderMonkey" : "SM",
     "SpiderMonkey DTrace" : "d",

@@ -553,6 +553,8 @@ Data.prototype = {
         /reftest/i.test(name) ? "Reftest" :
         /xpcshell/i.test(name) ? "XPCShellTest" :
         /depend/i.test(name) ? "Build" :
+        /qt .* xulrunner/i.test(name) ? "Qt XULRunner" :
+        /xulrunner/i.test(name) ? "XULRunner" :
         /(linux|maemo .*) qt/i.test(name) ? "Qt Build" :
         /mobile desktop/i.test(name) ? "Mobile Desktop Build" :
         /build/i.test(name) ? "Build" :
