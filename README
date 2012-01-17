@@ -42,3 +42,7 @@ In order to keep the run data in the database up to date, the import script need
 This will run dataimport/import-buildbot-data.py every 5 minutes.
 
 If any of this doesn't work, or if you have any other questions, pester mstange or file a TBPL bug.
+
+Test server instance:
+
+There is a staging installation of TBPL at https://tbpl-dev.allizom.org/ which gets all of the changes pushed to the central repository every 15 minutes.  If you commit code to that repository, please use the test instance to make sure that you have not broken anything before making your changes live on tbpl.mozilla.org.  For getting access to that instance, ping philor on IRC.
