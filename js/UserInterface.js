@@ -1110,7 +1110,8 @@ var UserInterface = {
       '<a class="date" data-timestamp="' + push.date.getTime() +
       '" href="' + this._controller.getURLForChangedParams({rev:push.toprev}) + '">' +
       self._getDisplayDate(push.date) + '</a>' +
-      ' <span class="talosCompare">(<label>compare: <input class="revsToCompare" type="checkbox" value="' + push.toprev + '"></label>)</span>' +
+      ' <span class="talosCompare">(<label>compare: <input onclick="UserInterface._comparisonClickHandler();"' +
+      ' class="revsToCompare" type="checkbox" value="' + push.toprev + '"></label>)</span>' +
       '<a class="csetList" onclick="UserInterface._listChangesetsForPush(\''+ push.toprev +'\'); return false" href="#">List changeset URLs</a>';
     var buildAPILink = this._buildAPIURL(push.toprev);
     if (buildAPILink) {
@@ -1127,7 +1128,6 @@ var UserInterface = {
     var node = $(nodeHtml);
     this._refreshPushPatchesInPushNode(push, node);
     this._refreshPushResultsInPushNode(push, node);
-    this._installComparisonClickHandler(node);
     this._installTooltips(node);
     return node;
   },
@@ -1252,22 +1252,33 @@ var UserInterface = {
    * - allow to select multiple revs, show them somewhere in the ui with a
    *   button that does the compare
    */
-  _installComparisonClickHandler: function UserInterface__installComparisonClickHandler(context) {
-    $(".revsToCompare", context).bind("click", function clickRevsToCompare(e) {
-      // get selected revisions
-      var revs = $(".revsToCompare").map(function() {
-        return this.checked ? this.value : null;
-      }).get();
-      // the new rev is first in the dom
+  _comparisonClickHandler: function UserInterface__comparisonClickHandler() {
+    // get selected revisions
+    var revs = $(".revsToCompare").map(function() {
+      return this.checked ? this.value : null;
+    }).get();
+    // the new rev is first in the dom
 
-      if (revs.length < 2)
-        return;
+    if (revs.length < 2)
+      return;
 
-      // I dont like popups, but I dont see a better way right now
-      var perfwin = window.open("http://perf.snarkfest.net/compare-talos/index.php?oldRevs=" +
-                                revs.slice(1).join(",") + "&newRev=" + revs[0] + "&tests=" +
-                                Config.talosTestNames.join(",") + "&submit=true");
-      perfwin.focus();
+    // I dont like popups, but I dont see a better way right now
+    var perfwin = window.open("http://perf.snarkfest.net/compare-talos/index.php?oldRevs=" +
+                              revs.slice(1).join(",") + "&newRev=" + revs[0] + "&tests=" +
+                              Config.talosTestNames.join(",") + "&submit=true");
+    perfwin.focus();
+  },
+
+  _createTooltipPopup: function UserInterface__createTooltipPopup() {
+    // `this` is the li.push for which we create the popups, see _installTooltips below.
+    $(this).unbind();
+    $(".patches > li > div > .patchTitle", this).each(function createPopupPatch(i) {
+      var div = $(this);
+      var rightEdgeLi = div.parents("li").get(0).getBoundingClientRect().right;
+      var rightEdgeDiv = div.get(0).getBoundingClientRect().right;
+      if (rightEdgeLi - rightEdgeDiv > 10)
+        return; // There's enough space; no need to show the popup.
+      div.clone().addClass("popup").insertBefore(div);
     });
   },
 
@@ -1276,17 +1287,7 @@ var UserInterface = {
     // reflow, so we still do the element creation in the mouseenter handler.
     // We also still need the child span to have meaningful children.width numbers.
     context.unbind("mouseenter");
-    context.bind("mouseenter", function createPopup() {
-      $(this).unbind();
-      $(".patches > li > div > .patchTitle", this).each(function createPopupPatch(i) {
-        var div = $(this);
-        var rightEdgeLi = div.parents("li").get(0).getBoundingClientRect().right;
-        var rightEdgeDiv = div.get(0).getBoundingClientRect().right;
-        if (rightEdgeLi - rightEdgeDiv > 10)
-          return; // There's enough space; no need to show the popup.
-        div.clone().addClass("popup").insertBefore(div);
-      });
-    });
+    context.bind("mouseenter", this._createTooltipPopup);
   },
 
   _clickNowhere: function UserInterface__clickNowhere(e) {
