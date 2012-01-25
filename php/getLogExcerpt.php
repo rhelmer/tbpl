@@ -20,23 +20,23 @@ $run = getRequestedRun();
 try {
   if ($type == "reftest") {
     $logParser = new LogParser($run, new ReftestFailureFilter());
-    $reftestExcerptFilename = $logParser->ensureExcerptExists();
-    GzipUtils::passThru($reftestExcerptFilename, 'text/plain');
+    $reftestExcerpt = $logParser->ensureExcerptExists();
+    GzipUtils::passThru($reftestExcerpt, 'text/plain');
   } else if ($type == "tinderbox_print") {
     $logParser = new LogParser($run, new TinderboxPrintFilter());
-    $tinderboxPrintExcerptFilename = $logParser->ensureExcerptExists();
-    GzipUtils::passThru($tinderboxPrintExcerptFilename, 'text/plain');
+    $tinderboxPrintExcerpt = $logParser->ensureExcerptExists();
+    GzipUtils::passThru($tinderboxPrintExcerpt, 'text/plain');
   } else {
     $logParser = new LogParser($run, new GeneralErrorFilter());
-    $rawErrorSummaryFilename = $logParser->ensureExcerptExists();
+    $rawErrorSummary = $logParser->ensureExcerptExists();
     if ($type != "annotated") {
-      GzipUtils::passThru($rawErrorSummaryFilename, 'text/plain');
+      GzipUtils::passThru($rawErrorSummary, 'text/plain');
     } else {
       date_default_timezone_set('America/Los_Angeles');
       $logDescription = $run['buildername'].' on '.date("Y-m-d H:i:s", $run['starttime']);
-      $annotatedSummaryGenerator = new AnnotatedSummaryGenerator($rawErrorSummaryFilename, $logDescription);
-      $annotatedSummaryFilename = $annotatedSummaryGenerator->ensureAnnotatedSummaryExists();
-      GzipUtils::passThru($annotatedSummaryFilename, 'text/plain');
+      $annotatedSummaryGenerator = new AnnotatedSummaryGenerator($rawErrorSummary, $logDescription);
+      $annotatedSummary = $annotatedSummaryGenerator->ensureAnnotatedSummaryExists();
+      GzipUtils::passThru($annotatedSummary, 'text/plain');
     }
   }
 } catch (Exception $e) {

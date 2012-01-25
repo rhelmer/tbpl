@@ -23,8 +23,8 @@ try {
   $logGenerator = $viewFullLog ?
                          new FullLogGenerator($logParser, $run) :
                          new ShortLogGenerator($logParser, $run);
-  $parsedLogFilename = $logGenerator->ensureLogExists();
-  GzipUtils::passThru($parsedLogFilename, "text/html");
+  $parsedLog = $logGenerator->ensureLogExists();
+  GzipUtils::passThru($parsedLog, "text/html");
 } catch (Exception $e) {
   die($e->getMessage());
 }

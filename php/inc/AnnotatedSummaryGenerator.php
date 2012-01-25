@@ -2,7 +2,7 @@
 /* -*- Mode: PHP; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* vim: set sw=2 ts=2 et tw=80 : */
 
-require_once 'inc/ParallelFileGenerating.php';
+require_once 'inc/ParallelLogGenerating.php';
 require_once 'inc/GzipUtils.php';
 
 /**
@@ -12,27 +12,32 @@ require_once 'inc/GzipUtils.php';
  * is annotated with orange bug suggestions.
  */
 
-class AnnotatedSummaryGenerator implements FileGenerator {
+class AnnotatedSummaryGenerator implements LogGenerator {
   protected $bugsCache = array();
 
-  public function __construct($rawSummaryFilename, $logDescription) {
-    $this->rawSummaryFilename = $rawSummaryFilename;
+  public function __construct($rawSummary, $logDescription) {
+    $this->rawSummary = $rawSummary;
     $this->logDescription = $logDescription;
+    $this->hasLeak = false;
   }
 
-  public function generate($filename) {
-    $file = GzipUtils::getLines($this->rawSummaryFilename);
+  public function generate($log) {
+    $file = GzipUtils::getLines($this->rawSummary);
     $lines = array();
     foreach ($file as $line) {
       $this->processLine($lines, $line);
     }
-    GzipUtils::writeToFile($filename, implode("", $lines));
+    if ($this->hasLeak) {
+      $lines[] = "<a href=\"php/getLeakAnalysis.php?id=" . $_GET["id"] .
+        "\" target=\"_blank\">Analyze the leak.</a>";
+    }
+    GzipUtils::writeToDb($log, implode("", $lines));
   }
 
   public function ensureAnnotatedSummaryExists() {
-    $annotatedSummaryFilename = str_replace("/excerpt/", "/annotatedsummary/", $this->rawSummaryFilename);
-    ParallelFileGenerating::ensureFileExists($annotatedSummaryFilename, $this);
-    return $annotatedSummaryFilename;
+    $log = array("_id" => $this->rawSummary['_id'], "type" => "annotatedsummary");
+    ParallelLogGenerating::ensureLogExists($log, $this);
+    return $log;
   }
 
   protected function generateSuggestion($bug, $line) {
@@ -58,8 +63,7 @@ class AnnotatedSummaryGenerator implements FileGenerator {
     $parts = preg_split("/[\\/\\\\]/", $testPath);
     if (count($parts) < 2 &&
         preg_match('/^leaked/i', $tokens[2])) {
-      $lines[] = "<a href=\"leak-analysis/?id=" . $_GET["id"] .
-        "&tree=" . $_GET["tree"] . "\" target=\"_blank\">Analyze the leak.</a>";
+      $this->hasLeak = true;
       return;
     }
   

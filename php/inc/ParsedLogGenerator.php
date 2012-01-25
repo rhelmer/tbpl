@@ -7,17 +7,17 @@
  */
 
 require_once 'inc/LogParser.php';
-require_once 'inc/ParallelFileGenerating.php';
+require_once 'inc/ParallelLogGenerating.php';
 
-abstract class ParsedLogGenerator implements FileGenerator {
+abstract class ParsedLogGenerator implements LogGenerator {
 
   // e.g. "short" or "full"
   abstract protected function getType();
 
   public function ensureLogExists() {
-    $parsedLogFilename = "../cache/parsedlog/".$this->runID."_".$this->getType().".html.gz";
-    ParallelFileGenerating::ensureFileExists($parsedLogFilename, $this);
-    return $parsedLogFilename;
+    $log = array("_id" => $this->runID, "type" => $this->getType());
+    ParallelLogGenerating::ensureLogExists($log, $this);
+    return $log;
   }
 
   public function __construct(LogParser $logParser, $run) {
@@ -31,11 +31,11 @@ abstract class ParsedLogGenerator implements FileGenerator {
     $this->branch = $run['branch'];
   }
 
-  public function generate($filename) {
+  public function generate($dbLog) {
     $summary = $this->logParser->getExcerpt(true);
     $log = $this->getLog();
     $result = $this->generateHTML($summary, $log);
-    GzipUtils::writeToFile($filename, $result);
+    GzipUtils::writeToDb($dbLog, $result);
   }
 
   abstract protected function getLog();

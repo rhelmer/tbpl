@@ -68,3 +68,18 @@ CREATE TABLE IF NOT EXISTS `runs_notes` (
   INDEX runs_notes_run_id_idx (run_id),
   FOREIGN KEY (run_id) REFERENCES runs(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `runs_logs`
+--
+
+CREATE TABLE IF NOT EXISTS `runs_logs` (
+  `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  `buildbot_id` integer NOT NULL,
+  `type` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `content` longblob,
+  UNIQUE INDEX runs_logs_buildbot_id_type_idx (buildbot_id, type),
+  FOREIGN KEY (buildbot_id) REFERENCES runs(buildbot_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

@@ -6,16 +6,17 @@
  * This class downloads gzipped log files from ftp.mozilla.org.
  */
 
-require_once 'inc/ParallelFileGenerating.php';
+require_once 'inc/ParallelLogGenerating.php';
 require_once 'inc/GzipUtils.php';
 
-class RawGzLogDownloader implements FileGenerator {
+class RawGzLogDownloader implements LogGenerator {
 
   public function __construct($logURL) {
     $this->logURL = $logURL;
   }
 
-  public function generate($filename) {
+  public function generate($log) {
+    global $db;
     $host = "ftp.mozilla.org";
     $hostpos = strpos($this->logURL, $host);
     if ($hostpos === false)
@@ -24,14 +25,27 @@ class RawGzLogDownloader implements FileGenerator {
     $ftpstream = @ftp_connect($host);
     if (!@ftp_login($ftpstream, "anonymous", ""))
       throw new Exception("Couldn't connect to Mozilla FTP server.");
-    if (!@ftp_get($ftpstream, $filename, $path, FTP_BINARY))
+    $fp = tmpfile();
+    if (!@ftp_fget($ftpstream, $fp, $path, FTP_BINARY))
       throw new Exception("Log not available at URL {$this->logURL}.");
     ftp_close($ftpstream);
+    rewind($fp);
+    $db->beginTransaction();
+    $stmt = $db->prepare("
+      UPDATE runs_logs
+      SET content = :content
+      WHERE buildbot_id = :id AND type = :type;");
+    $stmt->bindParam(":content", $fp, PDO::PARAM_LOB);
+    $stmt->bindParam(":id", $log['_id']);
+    $stmt->bindParam(":type", $log['type']);
+    $stmt->execute();
+    $db->commit();
+    fclose($fp);
   }
 
   public static function getLines($run) {
-    $rawLogFilename = "../cache/rawlog/".$run['_id'].".txt.gz";
-    ParallelFileGenerating::ensureFileExists($rawLogFilename, new self($run['log']));
-    return GzipUtils::getLines($rawLogFilename);
+    $log = array("_id" => $run['_id'], "type" => "raw");
+    ParallelLogGenerating::ensureLogExists($log, new self($run['log']));
+    return GzipUtils::getLines($log);
   }
 }

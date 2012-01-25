@@ -2,12 +2,12 @@
 /* -*- Mode: PHP; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* vim: set sw=2 ts=2 et tw=80 : */
 
-require_once 'inc/ParallelFileGenerating.php';
+require_once 'inc/ParallelLogGenerating.php';
 require_once 'inc/GzipUtils.php';
 require_once 'inc/RawGzLogDownloader.php';
 require_once 'inc/LineFilter.php';
 
-class LogParser implements FileGenerator {
+class LogParser implements LogGenerator {
   private $lines = null;
   private $filteredLines = null;
 
@@ -17,14 +17,14 @@ class LogParser implements FileGenerator {
   }
 
   public function ensureExcerptExists() {
-    $excerptFilename = "../cache/excerpt/".$this->run['_id']."_".$this->lineFilter->getType().".txt.gz";
-    ParallelFileGenerating::ensureFileExists($excerptFilename, $this);
-    return $excerptFilename;
+    $log = array("_id" => $this->run['_id'], "type" => $this->lineFilter->getType());
+    ParallelLogGenerating::ensureLogExists($log, $this);
+    return $log;
   }
 
-  // Called during ensureExcerptExists, FileGenerator implementation
-  public function generate($filename) {
-    GzipUtils::writeToFile($filename, $this->getExcerpt());
+  // Called during ensureExcerptExists, LogGenerator implementation
+  public function generate($log) {
+    GzipUtils::writeToDb($log, $this->getExcerpt());
   }
 
   protected function linkLine($target, $text) {
