@@ -105,6 +105,8 @@ class Run(object):
 
     def _log(self):
         """Return the log URL for this run, or None if it can't be figured out."""
+        if "log_url" in self._props:
+            return self._props["log_url"]
         data = {
           "builder": self._builder,
           "buildnumber": self._props["buildnumber"],
