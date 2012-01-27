@@ -1476,7 +1476,7 @@ var UserInterface = {
     box.html((function htmlForResultInBottomBar() {
       var revs = result.revs;
       function makeButton(image, type, arg) {
-        return '<img src="images/' + image + '"' +
+        return '<img tabindex="0" src="images/' + image + '"' +
                ' title="' + type + '"' +
                ' onclick="UserInterface._' + type.toLowerCase() + 'ButtonClick(this, \'' + arg + '\')">';
       }
