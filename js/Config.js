@@ -64,6 +64,11 @@ var Config = {
       hasGroups: true,
       buildbotBranch: "mozilla-release",
     },
+    "Mozilla-Esr10": {
+      primaryRepo: "releases/mozilla-esr10",
+      hasGroups: true,
+      buildbotBranch: "mozilla-esr10",
+    },
     "Firefox3.6": {
       primaryRepo: "releases/mozilla-1.9.2",
       buildbotBranch: "mozilla-1.9.2",
