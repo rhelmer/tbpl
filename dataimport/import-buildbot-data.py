@@ -259,10 +259,10 @@ def add_to_db(url, db, overwrite):
     print "Updated", count, "builders."
 
 def do_date(date, db, overwrite):
-    add_to_db(date.strftime("http://build.mozilla.org/builds/builds-%Y-%m-%d.js.gz"), db, overwrite)
+    add_to_db(date.strftime("http://builddata.pub.build.mozilla.org/buildjson/builds-%Y-%m-%d.js.gz"), db, overwrite)
 
 def do_recent(db, overwrite):
-    add_to_db("http://build.mozilla.org/builds/builds-4hr.js.gz", db, overwrite)
+    add_to_db("http://builddata.pub.build.mozilla.org/buildjson/builds-4hr.js.gz", db, overwrite)
 
 usage = """
 %prog [options]

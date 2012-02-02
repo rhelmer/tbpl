@@ -14,7 +14,7 @@ var Config = {
   baseURL: "",
   absoluteBaseURL: "https://tbpl.mozilla.org/", // used for log links in tbplbot bugzilla comments
   useGoogleCalendar: true,
-  jsonPendingOrRunningBaseURL: "http://build.mozilla.org/builds/",
+  jsonPendingOrRunningBaseURL: "http://builddata.pub.build.mozilla.org/buildjson/",
   htmlPendingOrRunningBaseURL: "http://build.mozilla.org/buildapi/",
   selfServeAPIBaseURL: "https://build.mozilla.org/buildapi/self-serve",
   alternateTinderboxPushlogURL: "http://build.mozillamessaging.com/tinderboxpushlog/?tree=",
