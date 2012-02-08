@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- Mode: Python; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+# vim: set sw=4 ts=4 et tw=80 :
 
 # This script imports run data from build.mozilla.org into the local MySQL DB;
 # specifically, into the "runs" table of the "tbpl" database.
@@ -19,6 +21,8 @@ import optparse
 import pytz
 import MySQLdb
 import os
+import subprocess
+from select import select
 from string import Template
 
 try:
@@ -250,7 +254,8 @@ def add_to_db(url, db, overwrite):
         return
 
     print "Traversing runs and inserting into database..."
-    count = sum([add_run_to_db(run, db, overwrite) for run in get_runs(j)])
+    inserted_runs = filter(lambda x: x, [run if add_run_to_db(run, db, overwrite) else None for run in get_runs(j)])
+    count = len(inserted_runs)
     if overwrite:
         print "Inserted or updated", count, "run entries."
     else:
@@ -260,11 +265,13 @@ def add_to_db(url, db, overwrite):
     count = sum([add_builder_to_db(builder, db) for builder in get_builders(j)])
     print "Updated", count, "builders."
 
+    return inserted_runs
+
 def do_date(date, db, overwrite):
-    add_to_db(date.strftime("http://builddata.pub.build.mozilla.org/buildjson/builds-%Y-%m-%d.js.gz"), db, overwrite)
+    return add_to_db(date.strftime("http://builddata.pub.build.mozilla.org/buildjson/builds-%Y-%m-%d.js.gz"), db, overwrite)
 
 def do_recent(db, overwrite):
-    add_to_db("http://builddata.pub.build.mozilla.org/buildjson/builds-4hr.js.gz", db, overwrite)
+    return add_to_db("http://builddata.pub.build.mozilla.org/buildjson/builds-4hr.js.gz", db, overwrite)
 
 usage = """
 %prog [options]
@@ -279,6 +286,8 @@ def main():
     parser.add_option("-p","--password",help="mysql password",type=str,default=None)
     parser.add_option("-H","--hostname",help="mysql hostname",type=str,default="localhost")
     parser.add_option("-n","--dbname",help="mysql database name",type=str,default="tbpl")
+    parser.add_option("-w","--workers",help="number of log prefetch workers",type=int,default=10)
+    parser.add_option("-t","--timeout",help="timeout for the log prefetch workers",type=int,default=30)
     (options,args) = parser.parse_args()
 
     password = ""
@@ -296,14 +305,78 @@ def main():
         user = options.username,
         passwd = password,
         db = options.dbname)
-    do_recent(db, options.overwrite)
+    
+    inserted_runs = do_recent(db, options.overwrite)
 
     # Import options.days days of history.
     tzinfo = pytz.timezone("America/Los_Angeles")
     today = datetime.datetime.now(tzinfo)
     for i in range(options.days):
-        do_date(today - datetime.timedelta(i), db, options.overwrite)
+        inserted_runs.extend(do_date(today - datetime.timedelta(i), db, options.overwrite))
+
+    # after the transaction has been committed:
+    # call the php cli to preprocess the logs
+
+    # we clear the bug cache here so this query need not be run from each of the
+    # worker scripts
+    cursor = db.cursor()
+    cursor.execute("DELETE FROM bugscache WHERE timestamp < ( NOW( ) - INTERVAL 1 DAY );")
     db.commit()
+
+    class PrefetchJob(object):
+        def __init__(self, job):
+            self.process = subprocess.Popen(job, stdout = subprocess.PIPE, stderr = open('/dev/null', 'w'))
+            self.stdout = self.process.stdout
+            self.fileno = self.stdout.fileno()
+            self.log = '\n' + ' '.join(job) + ':\n'
+            self.start = time.time()
+
+    jobs = [];
+    getlog_script = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'php', 'getLogExcerpt.php')
+    for run in inserted_runs:
+        if run.get_info().get('result') != 'success':
+            jobs.append(['php', getlog_script, 'id=' + str(run.id) + '&type=' + 'annotated'])
+
+    running = {};
+    def newjob():
+        try:
+            commandline = jobs.pop()
+        except IndexError:
+            return None
+        try:
+            job = PrefetchJob(commandline)
+            running[job.fileno] = job
+            return job
+        except OSError:
+            print 'command failed: ' + ' '.join(commandline)
+            return None
+
+    for i in range(options.workers):
+        newjob()
+
+    while len(running) > 0:
+        (readable, w, e) = select(map(lambda job: job.stdout, running.values()), [], [], 1)
+        completed = 0
+        for stream in readable:
+            job = running[stream.fileno()]
+            job.log = job.log + job.stdout.read(getattr(select, 'PIPE_BUF', 512))
+            if job.process.poll() != None:
+                del running[job.fileno]
+                completed = completed + 1
+                job.log = job.log + 'completed after ' + str(int((time.time() - job.start) * 1000)) + 'ms'
+                print job.log
+        for job in running.values():
+            if (time.time() - job.start) >= options.timeout:
+                del running[job.fileno]
+                completed = completed + 1
+                try:
+                    job.process.kill()
+                except:
+                    pass
+                job.log = job.log + ('\n' if job.log[-1] != '\n' else '') + 'timed out...'
+                print job.log
+        for i in range(completed):
+            newjob()
 
 if __name__ == "__main__":
    main()

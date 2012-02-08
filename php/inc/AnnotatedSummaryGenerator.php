@@ -4,6 +4,8 @@
 
 require_once 'inc/ParallelLogGenerating.php';
 require_once 'inc/GzipUtils.php';
+require_once 'inc/Timer.php';
+require_once 'inc/JSON.php';
 
 /**
  * AnnotatedSummaryGenerator
@@ -13,8 +15,6 @@ require_once 'inc/GzipUtils.php';
  */
 
 class AnnotatedSummaryGenerator implements LogGenerator {
-  protected $bugsCache = array();
-
   public function __construct($rawSummary, $logDescription) {
     $this->rawSummary = $rawSummary;
     $this->logDescription = $logDescription;
@@ -75,29 +75,53 @@ class AnnotatedSummaryGenerator implements LogGenerator {
     }
   }
 
-  protected function parseJSON($json) {
-    require_once "inc/JSON.php";
-    $engine = new Services_JSON();
-    return $engine->decode($json);
-  }
+  static $ignore = array('',
+    'automation.py', // This won't generate any useful suggestions, see bug 570174
+    'Main app process exited normally',
+    'automationutils.processLeakLog()'
+  );
 
   protected function getBugsForTestFailure($fileName) {
-    if ($fileName == '')
+    if (in_array($fileName, self::$ignore))
       return array();
-    if (isset($this->bugsCache[$fileName]))
-      return array();
-    if ($fileName == 'automation.py') {
-      // This won't generate any useful suggestions, see bug 570174
-      return array();
-    }
+
+    global $db;
+    $engine = new Services_JSON();
+    $stmt = $db->prepare("
+      SELECT json
+      FROM bugscache
+      WHERE filename=:filename");
+    $stmt->execute(array(":filename" => $fileName));
+    $result = $stmt->fetchColumn();
+    if ($result)
+      return $engine->decode($result);
+    // else: fetch it from bugzilla
+    $t = new Timer();
     $bugs_json = @file_get_contents("https://api-dev.bugzilla.mozilla.org/latest/bug?whiteboard=orange&summary=" . urlencode($fileName));
-    if ($bugs_json !== false) {
-      $bugs = $this->parseJSON($bugs_json);
-      if (isset($bugs->bugs)) {
-        $this->bugsCache[$fileName] = $bugs->bugs;
-        return $bugs->bugs;
-      }
+    $t->log('fetching bugs for "'.$fileName.'"');
+    if ($bugs_json === false)
+      return array();
+    $bugs = $engine->decode($bugs_json);
+    $bugs = isset($bugs->bugs) ? $bugs->bugs : array();
+    $bugs = array_map(function ($bug) {
+      $obj = new StdClass();
+      $obj->id = $bug->id;
+      $obj->summary = $bug->summary;
+      $obj->status = $bug->status;
+      $obj->resolution = $bug->resolution;
+      return $obj;
+    }, $bugs);
+    
+    // and save it in the database
+    $stmt = $db->prepare("
+      INSERT INTO bugscache (filename, json)
+      VALUES (:filename, :json);");
+    try {
+      $stmt->execute(array(":filename" => $fileName, ":json" => $engine->encode($bugs)));
+    } catch (Exception $e) {
+      // another process was faster, nevermind
     }
-    return array();
+
+    return $bugs;
   }
 }

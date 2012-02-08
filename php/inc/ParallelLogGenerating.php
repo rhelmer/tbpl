@@ -2,6 +2,8 @@
 /* -*- Mode: PHP; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* vim: set sw=2 ts=2 et tw=80 : */
 
+require_once 'inc/Timer.php';
+
 interface LogGenerator {
   public function generate($log);
 }
@@ -21,10 +23,11 @@ class ParallelLogGenerating {
   static public function ensureLogExists($log, LogGenerator $generator) {
     global $db;
     $slept = 0;
+    $t = new Timer();
     while (true) {
       if ($slept >= 60) {
         // it should really not take this long, maybe something is broken
-        die('Timeout generating log.');
+        die('Timeout waiting for log generation.');
       }
       $exists = self::queryLog($log);
       if (!$exists) {
@@ -46,8 +49,9 @@ class ParallelLogGenerating {
         }
         try {
           $generator->generate($log);
+          $t->log('generating '.$log['type'].' log');
           return;
-        } catch(Exception $e) {
+        } catch (Exception $e) {
           // in case we were not able to generate the log successfully, clear
           // the NULL value from the database so another process can retry
           $stmt = $db->prepare("
@@ -57,12 +61,12 @@ class ParallelLogGenerating {
             ':id' => $log['_id'],
             ':type' => $log['type']
           ));
-          sleep(1);
-          $slept++;
-          continue;
+          // rethrow, so we actually kill the script instead of timing out
+          throw $e;
         }
       } else if (!$exists['inprogress']) {
         // another process has finished the processing
+        $t->log('fetching/waiting for '.$log['type'].' log');
         return;
       }
       // else: busy-wait until the processing is finished
