@@ -543,7 +543,7 @@ Data.prototype = {
         /spidermonkey-warnaserr/i.test(name) ? "SpiderMonkey --enable-sm-fail-on-warnings" :
         /shark/i.test(name) ? "Shark Nightly" :
         /mochitest/i.test(name) ? "Mochitest" :
-        /unit chrome|browser-chrome/i.test(name) ? "Mochitest" :
+        /unit chrome|browser-chrome|robocop/i.test(name) ? "Mochitest" :
         /crashtest-ipc/.test(name) ? "Crashtest-IPC" :
         /crashtest/i.test(name) ? "Crashtest" :
         /jsreftest/i.test(name) ? "JSReftest" :
@@ -730,6 +730,9 @@ Machine.prototype = {
 
     if (this.name.match(/browser\-chrome/))
       return "b-c";
+
+    if (this.name.match(/robocop/))
+      return "rc";
 
     return "";
   },
