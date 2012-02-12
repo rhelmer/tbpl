@@ -520,15 +520,14 @@ Data.prototype = {
         /talos.*ts$/i.test(name) ? "Talos ts" :
         /talos.*tzoom$/i.test(name) ? "Talos zoom" :
         /talos.*dromaeo$/i.test(name) ? "Talos dromaeo" :
-        /talos.*svg$/i.test(name) ? "Talos svg" :
+        /talos.*svg(\.2)?$/i.test(name) ? "Talos svg" :
         /talos.*tp4m_nochrome$/i.test(name) ? "Talos tp nochrome" :
         /talos.*tp4m$/i.test(name) ? "Talos tp" :
-        /talos.*nochrome$/i.test(name) ? "Talos nochrome" :
+        /talos.*nochrome(\.2)?$/i.test(name) ? "Talos nochrome" :
         /talos.*tp4$/i.test(name) ? "Talos tp4" :
-        /talos.*tp$/i.test(name) ? "Talos tp" :
-        /talos.*tp_responsiveness$/i.test(name) ? "Talos tp" :
+        /talos.*tp(r)?(_responsiveness)?(_other)?$/i.test(name) ? "Talos tp" :
         /talos.*dirty$/i.test(name) ? "Talos dirty" :
-        /talos.*chrome(_mac)?$/i.test(name) ? "Talos chrome" :
+        /talos.*chrome(_mac)?(\.2)?$/i.test(name) ? "Talos chrome" :
         /talos.*paint$/i.test(name) ? "Talos paint" :
         /talos.*v8$/i.test(name) ? "Talos v8" :
         /talos/i.test(name) ? "Talos Performance" :
