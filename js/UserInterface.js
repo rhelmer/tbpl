@@ -1264,8 +1264,8 @@ var UserInterface = {
 
     // I dont like popups, but I dont see a better way right now
     var perfwin = window.open("http://perf.snarkfest.net/compare-talos/index.php?oldRevs=" +
-                              revs.slice(1).join(",") + "&newRev=" + revs[0] + "&tests=" +
-                              Config.talosTestNames.join(",") + "&submit=true");
+                              revs.slice(1).join(",") + "&newRev=" + revs[0] +
+                              "&submit=true");
     perfwin.focus();
   },
 
