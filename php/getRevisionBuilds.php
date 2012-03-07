@@ -14,15 +14,14 @@ $noIgnore = isset($_GET['noignore']) && $_GET['noignore'] == '1';
 $result = array();
 
 $stmt = $db->prepare("
-  SELECT id, buildbot_id AS _id, buildername, slave, result,
+  SELECT runs.id, buildbot_id AS _id, buildername, slave, result,
     unix_timestamp(starttime) AS starttime,
     unix_timestamp(endtime) AS endtime
-  FROM runs
-  WHERE branch = :branch AND revision = :revision
-  " . ($noIgnore ? "" : "AND buildername NOT IN (
-    SELECT buildername
-    FROM builders
-    WHERE branch = :branch AND hidden = TRUE)") . ";");
+  FROM runs LEFT JOIN builders USING (buildername)
+  WHERE runs.branch = :branch AND runs.revision = :revision
+  AND runs.buildername IS NOT NULL
+  " . ($noIgnore ? "" : "AND builders.hidden != TRUE"));
+
 $stmt->execute(array(":branch" => $branch, ":revision" => $rev));
 
 while ($run = $stmt->fetch(PDO::FETCH_ASSOC)) {
