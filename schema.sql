@@ -83,18 +83,3 @@ CREATE TABLE IF NOT EXISTS `runs_logs` (
   UNIQUE INDEX runs_logs_buildbot_id_type_idx (buildbot_id, type),
   FOREIGN KEY (buildbot_id) REFERENCES runs(buildbot_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `bugscache`
---
-
-CREATE TABLE IF NOT EXISTS `bugscache` (
-  `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
-  `filename` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `json` text COLLATE utf8_unicode_ci NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE INDEX bugscache_filename_idx (filename)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
