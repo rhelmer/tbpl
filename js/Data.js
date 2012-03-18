@@ -534,6 +534,8 @@ Data.prototype = {
         /mobile desktop .* nightly/i.test(name) ? "Mobile Desktop Nightly" :
         /maemo .* qt .* nightly/i.test(name) ? "Maemo Qt Nightly" :
         /rpm .* nightly/i.test(name) ? "RPM Nightly" :
+        /b2g .* nightly/i.test(name) ? "B2G Nightly" :
+        /b2g/i.test(name) ? "B2G Build" :
         /nightly/i.test(name) ? "Nightly" :
         /spidermonkey-dtrace/i.test(name) ? "SpiderMonkey DTrace" :
         /spidermonkey-nomethodjit/i.test(name) ? "SpiderMonkey --disable-methodjit" :

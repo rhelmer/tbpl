@@ -228,6 +228,7 @@ var Config = {
     "Qt Build" : "Bq",
     "Qt XULRunner" : "Xrq",
     "XULRunner" : "Xr",
+    "B2G Build" : "B2g",
     "Mobile Desktop Build" : "Bm",
     "SpiderMonkey" : "SM",
     "SpiderMonkey DTrace" : "d",
@@ -239,7 +240,8 @@ var Config = {
     "Shark Nightly" : "Ns",
     "Mobile Desktop Nightly" : "Nm",
     "Maemo Qt Nightly" : "Nq",
-    "RPM Nightly" : "Nr"
+    "RPM Nightly" : "Nr",
+    "B2G Nightly" : "Nb2g"
   },
   testNames: {
     "Mochitest" : "M",
