@@ -11,9 +11,11 @@ var Config = {
   mvtTimezoneName: "PDT",
   loadInterval: 120, // seconds
   goBackPushes: 10,
+  maxChangesets: 20,
   baseURL: "",
   absoluteBaseURL: "https://tbpl.mozilla.org/", // used for log links in tbplbot bugzilla comments
   useGoogleCalendar: true,
+  mercurialURL: "https://hg.mozilla.org/",
   jsonPendingOrRunningBaseURL: "http://builddata.pub.build.mozilla.org/buildjson/",
   htmlPendingOrRunningBaseURL: "http://build.mozilla.org/buildapi/",
   selfServeAPIBaseURL: "https://build.mozilla.org/buildapi/self-serve",

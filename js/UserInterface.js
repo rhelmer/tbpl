@@ -1078,7 +1078,16 @@ var UserInterface = {
 
   _buildHTMLForPushPatches: function UserInterface__buildHTMLForPushPatches(push) {
     var self = this;
-    return push.patches.map(function buildHTMLForPushPatch(patch, patchIndex) {
+
+    var patches = push.patches.slice(0);
+    var max = Config.maxChangesets;
+    var preElision = Math.floor(max / 2);
+    var elide = (patches.length > max) ? patches.length - max : 0;
+    if (max == 0)
+      elide = 0;
+    if (elide)
+      patches.splice(preElision, elide);
+    var patchhtml = patches.map(function buildHTMLForPushPatch(patch, patchIndex) {
       return '<li>\n' +
       '<a class="revlink" data-rev="' + patch.rev + '" href="' + self._changesetURL(patch.rev) + '">' + patch.rev +
       '</a>\n<div><div class="patchTitle"><span><span class="author">' +
@@ -1094,11 +1103,23 @@ var UserInterface = {
       })() +
       '</span></div></div>\n' +
       '</li>';
-    }).join("\n");
+    });
+
+    if (elide) {
+      var url = this._changesetsURL(push);
+      patchhtml.splice(preElision, 0, "<li>...<a href='" + url + "'>" + elide + " changesets omitted</a>...</li>");
+    }
+
+    return patchhtml.join("\n");
+  },
+
+  _changesetsURL: function UserInterface__changesetsUrl(push) {
+    // pushloghtml is bizarre -- startID is *exclusive*, endID is inclusive
+    return Config.mercurialURL + Config.treeInfo[this._treeName].primaryRepo + '/pushloghtml?startID=' + (push.id-1) + '&endID=' + push.id;
   },
 
   _changesetURL: function UserInterface__changesetUrl(rev) {
-    return 'https://hg.mozilla.org/' + Config.treeInfo[this._treeName].primaryRepo + '/rev/' + rev;
+    return Config.mercurialURL + Config.treeInfo[this._treeName].primaryRepo + '/rev/' + rev;
   },
 
   _generatePushNode: function UserInterface__generatePushNode(push) {
