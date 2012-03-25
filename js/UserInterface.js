@@ -18,6 +18,7 @@ var UserInterface = {
   _lastMessageID: 0,
   _nextBuildRequest: 0,
   _keymap: {
+    '?': 'help',
     'u': 'toggle-unstarred',
     'c': 'show-comment',
     'j': 'prev-unstarred',
@@ -30,6 +31,7 @@ var UserInterface = {
              'next-unstarred': 'Highlight next unstarred failure',
              'toggle-unstarred': 'Toggle showing only unstarred failures',
              'select': 'Select/deselect active build or changeset',
+             'help': 'Show the help box',
              'show-comment': 'Show the comment box'
            },
 
@@ -670,6 +672,12 @@ var UserInterface = {
       }
 
       var action = self._keymap[String.fromCharCode(event.which)];
+
+      // Toggle the help box
+      if (action == 'help') {
+        $('#helpContainer').toggleClass('open');
+        return false;
+      }
 
       // Toggle "Only unstarred" filter
       if (action == 'toggle-unstarred') {
