@@ -53,6 +53,14 @@ var AddCommentUI = {
       return false;
     });
 
+    $("#logNoteText").bind("keyup", function logNoteTextKeypress(e) {
+      // Control+Enter submits the form
+      if (e.which == 13 && (e.ctrlKey || e.metaKey)) {
+        $("#addNoteForm").submit();
+        return false;
+      }
+    });
+
     // Defeat the keep-text-on-reload feature, because it results in
     // comments containing changesets that are no longer selected.
     $("#logNoteText").val('');
