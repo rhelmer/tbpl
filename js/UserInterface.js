@@ -68,7 +68,7 @@ var UserInterface = {
 
     $("#adminUILink").bind("click", function adminUILinkClick() {
       Config.tinderboxDataLoader.openAdminUI(self._treeName);
-      $(".dropdown").removeClass("open");
+      UserInterface._closeAllPopupUI();
       return false;
     });
 
@@ -86,10 +86,7 @@ var UserInterface = {
     });
 
     $(".closePopup").bind("click", function closePopupClick() {
-      $(this).parents(".popupForm").fadeOut('fast', function afterFadeOut() {
-        if ("afterCloseCallback" in this)
-          this.afterCloseCallback();
-      });
+      UserInterface.closePopup($(this).parents(".popupForm"));
       return false;
     });
 
@@ -513,6 +510,19 @@ var UserInterface = {
     this._setOnlyUnstarred(!this._onlyUnstarred);
   },
 
+  closePopup: function UserInterface__closePopup(popup) {
+    $(popup).fadeOut('fast', function afterFadeOut() {
+      if ('afterCloseCallback' in this)
+        this.afterCloseCallback();
+    });
+  },
+
+  // Close all dropdowns and popups
+  _closeAllPopupUI: function UserInterface__closeAllPopupUI() {
+    $('.dropdown').removeClass('open');
+    this.closePopup($('.popupForm:visible'));
+  },
+
   // Get all jobs' results, optionally filtered by a pusher
   _getAllResults: function UserInterface__getAllResults() {
     var self = this;
@@ -746,6 +756,20 @@ var UserInterface = {
       }
 
       return true;
+    });
+
+    // Use keydown instead of keypress for non-character keys
+    jQuery(document).keydown(function(event) {
+      // We don't have keybindings with modifiers.
+      if (event.metaKey || event.altKey || event.ctrlKey) {
+        return;
+      }
+
+      switch (event.which) {
+        case 27: // escape
+          UserInterface._closeAllPopupUI();
+          return false;
+      }
     });
   },
 
