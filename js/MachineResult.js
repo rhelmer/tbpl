@@ -90,11 +90,16 @@ MachineResult.prototype = {
     if (!foundSomething)
       return this._getScrapeResults(scrape);
 
+    var results = $(scrape).map(function findSlaveName() {
+      return /^s:/.test(this) && { name: this };
+    }).filter(function filterNull() { return this; }).get();
+
     var failLines = $(scrape).map(function parseFailedTalosRunScrapeLine() {
       return this.match(/FAIL\:(.*)/) && { name: this };
     }).filter(function filterNull() { return this; }).get();
-  
-    return failLines.concat($('a', cell).map(function parseEachGraphLink() {
+    results = results.concat(failLines);
+
+    return results.concat($('a', cell).map(function parseEachGraphLink() {
       var resultURL = $(this).attr("href");
       if (resultURL.indexOf("http://graphs") != 0)
         return;
