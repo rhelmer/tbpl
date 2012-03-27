@@ -107,14 +107,13 @@ var AddCommentUI = {
           header: suggestion.signature,
           log: suggestion.log,
           email: email.replace("@", "%"),
+          slave: machineResult.slave,
           logLink: machineResult.absoluteBriefLogURL
         };
       }
     });
     for (var id in bugsSubmitData) {
-      this._postOneBug(id, bugsSubmitData[id].header, bugsSubmitData[id].logLink,
-                       bugsSubmitData[id].email, bugsSubmitData[id].log,
-                       function oneLessBugPending() {
+      this._postOneBug(id, bugsSubmitData[id], function oneLessBugPending() {
         self.pendingBugsChanged(-1);
       });
       this.pendingBugsChanged(1);
@@ -369,13 +368,18 @@ var AddCommentUI = {
     });
   },
 
-  _postOneBug: function AddCommentUI__postOneBug(id, header, logLink, email, summary, callback) {
+  _postOneBug: function AddCommentUI__postOneBug(id, data, callback) {
     $.ajax({
       url: Config.baseURL + "php/submitBugzillaComment.php",
       type: "POST",
       data: {
         id: id,
-        comment: email + "\n" + logLink + "\n" + header + "\n\n" + summary,
+        comment:
+          data.email + "\n" +
+          data.logLink + "\n" +
+          data.header + "\n" +
+          "slave: " + data.slave + "\n\n" +
+          data.log,
       },
       complete: callback,
     });
