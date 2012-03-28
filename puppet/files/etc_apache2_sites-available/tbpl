@@ -1,0 +1,8 @@
+<VirtualHost *:80>
+    # FIXME customize this
+    ServerName tbpl
+    # FIXME customize this
+    ServerAdmin me@example.com
+    DocumentRoot /var/www/tbpl
+</VirtualHost>
+
