@@ -98,6 +98,7 @@ class ShortLogGenerator extends ParsedLogGenerator {
       "<title>Log - ".$logDescription."</title>\n".
       "<h1>Log</h1>\n".
       '<p class="subtitle">'.$logDescription." for ".$revLink."</p>\n".
+      '<p class="slave">slave: '.$this->slave."</p>\n".
       '<p class="viewFullLog"><a href="?id='.$this->runID.
       '&amp;full=1&amp;branch='.$this->branch.'">View Full Log</a></p>'.
       '<p class="downloadFullLog"><a href="'.$this->logURL.'">Download Full Log</a></p>';

@@ -24,6 +24,7 @@ abstract class ParsedLogGenerator implements LogGenerator {
     $this->logParser = $logParser;
     $this->runID = $run['_id'];
     $this->machineType = $run['buildername'];
+    $this->slave = $run['slave'];
     $this->revision = $run['revision'];
     $this->endTime = $run['endtime'];
     $this->startTime = $run['starttime'];
