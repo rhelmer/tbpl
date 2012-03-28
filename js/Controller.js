@@ -176,7 +176,7 @@ var Controller = {
         // Ignore DST and find Mozilla Standard Time
         var mst = new Date(Date.now() +
                            (new Date()).getTimezoneOffset() * 60 * 1000 +
-                           Config.mvtTimezoneOffset * 60 * 60 * 1000);
+                           MVTime.timezone.offset * 60 * 60 * 1000);
 
         var query = new google.gdata.calendar.CalendarEventQuery(url);
         query.setMinimumStartTime(new google.gdata.DateTime(mst, true));

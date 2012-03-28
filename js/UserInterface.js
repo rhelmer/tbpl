@@ -909,12 +909,12 @@ var UserInterface = {
     if (this._useLocalTime())
       return date;
 
-    var hoursdiff = date.getTimezoneOffset() / 60 + Config.mvtTimezoneOffset;
+    var hoursdiff = date.getTimezoneOffset() / 60 + MVTime.timezone.offset;
     return new Date(date.getTime() + hoursdiff * 60 * 60 * 1000);
   },
 
   _getDisplayDate: function UserInterface__getDisplayDate(date) {
-    var timezoneName = this._useLocalTime() ? "" : " " + Config.mvtTimezoneName;
+    var timezoneName = this._useLocalTime() ? "" : " " + MVTime.timezone.name;
     var d = this._getTimezoneAdaptedDate(date);
     // Thu Jan 7 20:25:03 2010 (PST)
     return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d.getDay()] + " " +
